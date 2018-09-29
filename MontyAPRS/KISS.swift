@@ -18,33 +18,24 @@ protocol KISSDelegate: AnyObject {
     func didRecieveFrame(data: Data)
 }
 
-/**
- 
-*/
 class KISS: NSObject, GCDAsyncSocketDelegate {
-    var delegate: KISSDelegate?
 
     // MARK: List of Constants
     private let TAG_KISS_START = 1
     private let TAG_KISS_FRAME = 2
-    
-    private var FEND = UInt8(0xC0)
-    private var FESC = UInt8(0xDB)
-    private var TFEND = UInt8(0xDC)
-    private var TFESC = UInt8(0xDD)
+    let FEND: UInt8 = 0xC0
+    let FESC: UInt8 = 0xDB
+    let TFEND: UInt8 = 0xDC
+    let TFESC: UInt8 = 0xDD
 
+    // MARK: Member Variables
     var hostname: String
     var port: UInt16
     var isConnected: Bool = false
     private var socket: GCDAsyncSocket!
+    private var delegate: KISSDelegate?
     
-    /**
-     Initializes the KISS class.
- 
-    - Parameter hostname: hostname or IP to connect
-    - Parameter port: port to connect
-    - Parameter withDelegate: delegate class to receive events
-    */
+    // MARK: Initializer
     init(hostname: String, port: UInt16, withDelegate delegate: KISSDelegate?) {
         self.hostname = hostname
         self.port = port
@@ -55,6 +46,7 @@ class KISS: NSObject, GCDAsyncSocketDelegate {
         socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
     }
 
+    // MARK: Methods
     func connect() {
         do {
             try socket.connect(toHost: hostname, onPort: port)
@@ -64,6 +56,7 @@ class KISS: NSObject, GCDAsyncSocketDelegate {
     }
     
     func disconnect() {
+        socket.write(Data(bytes: [FEND, 0x00, FEND]), withTimeout: -1, tag: 0)
         socket.disconnect()
     }
     
@@ -73,7 +66,7 @@ class KISS: NSObject, GCDAsyncSocketDelegate {
         isConnected = true
         
         // start reading for KISS frames
-        socket.readData(to: Data(bytes: &FEND, count: MemoryLayout.size(ofValue: FEND)), withTimeout: -1, tag: TAG_KISS_START)
+        socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: TAG_KISS_START)
     }
     
     // called when GCDAsyncSocket disconnects
@@ -86,17 +79,27 @@ class KISS: NSObject, GCDAsyncSocketDelegate {
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
         if tag == TAG_KISS_START {
             // recieved start of KISS frame, continue to read until next FEND
-            socket.readData(to: Data(bytes: &FEND, count: MemoryLayout.size(ofValue: FEND)), withTimeout: -1, tag: TAG_KISS_FRAME)
+            socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: TAG_KISS_FRAME)
             return
         }
         
         if tag == TAG_KISS_FRAME {
-            // remove FEND from end of recieved data
-            var frame = data.dropLast()
+            var frame: Data
+            
+            // check this is a data frame
+            if data[0] == 0x00 {
+                frame = data.dropFirst()
+            } else {
+                // this is isn't a data frame...do nothing
+                return
+            }
+            
+            // get rid of FEND at end of frame
+            frame = frame.dropLast()
             
             // look for FESC and replace with appropriate value
-            var position = 0
-            while position < frame.endIndex + 1 {
+            var position = frame.startIndex
+            while position <= frame.endIndex {
                 let bounds = frame.range(of: Data(bytes: [FESC]), in: position..<frame.endIndex)
                 if bounds != nil {
                     switch frame[bounds!.upperBound] {
@@ -112,12 +115,12 @@ class KISS: NSObject, GCDAsyncSocketDelegate {
                     break
                 }
             }
-
-            // pass received frame to delegate
+            
+            // this should be a raw AX.25 frame
             delegate?.didRecieveFrame(data: frame)
             
             // start read for the next frame
-            socket.readData(to: Data(bytes: &FEND, count: MemoryLayout.size(ofValue: FEND)), withTimeout: -1, tag: TAG_KISS_START)
+            socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: TAG_KISS_START)
         }
     }
 }
