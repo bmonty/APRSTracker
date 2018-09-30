@@ -9,56 +9,64 @@
 import Foundation
 import CocoaAsyncSocket
 
-/**
- Protocol for interaction with KISS class.
-*/
-protocol KISSDelegate: AnyObject {
-    func didConnect()
-    func didDisconnect()
-    func didRecieveFrame(data: Data)
+struct KISSData: APRSData {
+    typealias APRSDataElement = Data
+    var protocolName = "KISS_FRAME"
+    var data: Data
+    
+    init(data: Data) {
+        self.data = data
+    }
 }
 
-class KISS: NSObject, GCDAsyncSocketDelegate {
+class KISS: NSObject, APRSParser {
 
-    // MARK: List of Constants
-    private let TAG_KISS_START = 1
-    private let TAG_KISS_FRAME = 2
+    // MARK: - Constants
     let FEND: UInt8 = 0xC0
     let FESC: UInt8 = 0xDB
     let TFEND: UInt8 = 0xDC
     let TFESC: UInt8 = 0xDD
+    private let TAG_KISS_START = 1
+    private let TAG_KISS_FRAME = 2
 
-    // MARK: Member Variables
-    var hostname: String
-    var port: UInt16
+    // MARK: - Properties
+    let hostname: String
+    let port: UInt16
     var isConnected: Bool = false
-    private var socket: GCDAsyncSocket!
-    private var delegate: KISSDelegate?
+    var delegate: InputDelegate?
+    private var socket: GCDAsyncSocket
     
-    // MARK: Initializer
-    init(hostname: String, port: UInt16, withDelegate delegate: KISSDelegate?) {
+    // MARK:  - Methods
+    init(hostname: String, port: UInt16) {
         self.hostname = hostname
         self.port = port
-        self.delegate = delegate
-       
+        socket = GCDAsyncSocket()
+        
         super.init()
         
-        socket = GCDAsyncSocket(delegate: self, delegateQueue: DispatchQueue.main)
+        socket.delegate = self
+        socket.delegateQueue = DispatchQueue.main
     }
 
-    // MARK: Methods
-    func connect() {
+    func start() -> Bool {
         do {
             try socket.connect(toHost: hostname, onPort: port)
         } catch let e {
             print(e)
+            return false
         }
+        
+        return true
     }
     
-    func disconnect() {
+    func stop() {
         socket.write(Data(bytes: [FEND, 0x00, FEND]), withTimeout: -1, tag: 0)
         socket.disconnect()
     }
+    
+}
+
+extension KISS: GCDAsyncSocketDelegate {
     
     // called when GCDAsyncSocket connects
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
@@ -116,11 +124,13 @@ class KISS: NSObject, GCDAsyncSocketDelegate {
                 }
             }
             
-            // this should be a raw AX.25 frame
-            delegate?.didRecieveFrame(data: frame)
+            // send received frame up the stack
+            let kissData = KISSData(data: frame)
+            delegate?.receivedData(data: kissData)
             
             // start read for the next frame
             socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: TAG_KISS_START)
         }
     }
+    
 }
