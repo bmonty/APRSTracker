@@ -74,69 +74,11 @@ class ViewController: NSViewController {
     }
 
     private func appendToTextField(string: String) {
-        print(string)
         textView.textStorage?.append(NSAttributedString(string: "\(string)\n"))
         textView.scrollToEndOfDocument(textView)
     }
 
 }
-
-// MARK: - Extensions
-//extension ViewController {
-//    // TODO: Move this out of ViewController
-//    func didRecieveFrame(data: Data) {
-//        let frame = AX25(withFrame: data)
-//        if frame == nil { return }
-//        
-//        let numberOfAddresses = frame!.getNumberOfAddresses()
-//        
-//        if numberOfAddresses > 0 {
-//            var decodedPacket = "\(frame!.getAddressWithSsid(addressNum: 1))>\(frame!.getAddressWithSsid(addressNum: 0))"
-//            
-//            if (numberOfAddresses - 2) > 0 {
-//                decodedPacket.append(",")
-//                for address in 2...numberOfAddresses - 1 {
-//                    let addressString = frame!.getAddressWithSsid(addressNum: address)
-//                    decodedPacket.append("\(addressString)")
-//                    
-//                    //                    if frame!.isAddressRepeated(addressNum: address) {
-//                    //                        decodedPacket.append("*")
-//                    //                    }
-//                    
-//                    if address < numberOfAddresses - 1 {
-//                        decodedPacket.append(",")
-//                    }
-//                }
-//            }
-//            
-//            decodedPacket.append(":")
-//            
-//            decodedPacket.append(String(bytes: frame!.getAprsInfo(), encoding: .ascii)!)
-//            
-//            appendToTextField(string: decodedPacket)
-//            
-//            let aprs = APRSBeacon(station: frame!.getAddressWithSsid(addressNum: 1), withData: frame!.getAprsInfo())
-//            if aprs != nil {
-//                let aprsAnnotation = MKPointAnnotation()
-//                aprsAnnotation.title = aprs?.station
-//                aprsAnnotation.coordinate = (aprs?.position)!
-//                
-//                map.addAnnotation(aprsAnnotation)
-//            }
-//        }
-//    }
-//    
-//    func didConnect() {
-//        isConnected = true
-//        print("Connected!")
-//    }
-//    
-//    func didDisconnect() {
-//        isConnected = false
-//        print("Disconnected!")
-//    }
-//    
-//}
 
 extension ViewController: CLLocationManagerDelegate {
     
@@ -159,10 +101,33 @@ extension ViewController: CLLocationManagerDelegate {
 }
 
 extension ViewController: APRSPlotter {
-    func receivePosition(beacon: APRSBeaconInfo) {
+    func receiveBeacon(beacon: APRSBeaconInfo) {
         let aprsAnnotation = MKPointAnnotation()
         aprsAnnotation.title = beacon.station
+        if beacon.message != nil {
+            aprsAnnotation.subtitle = beacon.message
+        }
         aprsAnnotation.coordinate = beacon.position
         map.addAnnotation(aprsAnnotation)
+        
+        var beaconText = String("\(beacon.station)>\(beacon.destination),")
+        if beacon.digipeaters != nil {
+            let digipeaters = beacon.digipeaters!
+            var numDigipeaters = digipeaters.count
+            for digipeater in digipeaters {
+                beaconText.append(digipeater)
+                if numDigipeaters < digipeaters.count {
+                    beaconText.append(",")
+                }
+                numDigipeaters += 1
+            }
+        }
+        
+        if beacon.message != nil {
+            let message = beacon.message!
+            beaconText.append(":\(message)")
+        }
+        
+        appendToTextField(string: beaconText)
     }
 }
