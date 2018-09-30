@@ -3,19 +3,32 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 51;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E02674032156A5BE006310FC /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E02674022156A5BE006310FC /* CocoaAsyncSocket.framework */; };
+		E02674072157291F006310FC /* AX25.swift in Sources */ = {isa = PBXBuildFile; fileRef = E02674062157291F006310FC /* AX25.swift */; };
+		E03C8A55216087C70072016B /* APRSPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C8A54216087C70072016B /* APRSPlotter.swift */; };
+		E099AB06215B23A0009166E1 /* APRSBeacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E099AB05215B23A0009166E1 /* APRSBeacon.swift */; };
+		E099AB0D215FEEF4009166E1 /* InputDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E099AB0C215FEEF4009166E1 /* InputDelegate.swift */; };
+		E099AB10215FF10D009166E1 /* APRSData.swift in Sources */ = {isa = PBXBuildFile; fileRef = E099AB0F215FF10D009166E1 /* APRSData.swift */; };
+		E099AB12215FFBA5009166E1 /* APRSParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = E099AB11215FFBA5009166E1 /* APRSParser.swift */; };
+		E0A0B4F921568FBD00DAB7BC /* KISS.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0A0B4F821568FBD00DAB7BC /* KISS.swift */; };
 		E0B9AF3D215454BD00D7CEBE /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9AF3C215454BD00D7CEBE /* AppDelegate.swift */; };
 		E0B9AF3F215454BD00D7CEBE /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9AF3E215454BD00D7CEBE /* ViewController.swift */; };
 		E0B9AF41215454BF00D7CEBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0B9AF40215454BF00D7CEBE /* Assets.xcassets */; };
 		E0B9AF44215454BF00D7CEBE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0B9AF42215454BF00D7CEBE /* Main.storyboard */; };
-		E0B9AF50215454BF00D7CEBE /* MontyAPRSTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9AF4F215454BF00D7CEBE /* MontyAPRSTests.swift */; };
-		E0B9AF5B215454BF00D7CEBE /* MontyAPRSUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0B9AF5A215454BF00D7CEBE /* MontyAPRSUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E02674132157F920006310FC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = E0B9AF31215454BD00D7CEBE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = E0B9AF38215454BD00D7CEBE;
+			remoteInfo = MontyAPRS;
+		};
 		E0B9AF4C215454BF00D7CEBE /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = E0B9AF31215454BD00D7CEBE /* Project object */;
@@ -33,6 +46,18 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		42FC40ED9D6A9C83466F6108 /* Pods-MontyAPRS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MontyAPRS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS.release.xcconfig"; sourceTree = "<group>"; };
+		830834C1F8BCCBA13A5A62AA /* Pods-MontyAPRS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MontyAPRS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS.debug.xcconfig"; sourceTree = "<group>"; };
+		BBD91CB4663F0EDD561E74D3 /* Pods_MontyAPRS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MontyAPRS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E02674022156A5BE006310FC /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E02674062157291F006310FC /* AX25.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AX25.swift; sourceTree = "<group>"; };
+		E026740E2157F920006310FC /* KISSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = KISSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		E03C8A54216087C70072016B /* APRSPlotter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APRSPlotter.swift; sourceTree = "<group>"; };
+		E099AB05215B23A0009166E1 /* APRSBeacon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APRSBeacon.swift; sourceTree = "<group>"; };
+		E099AB0C215FEEF4009166E1 /* InputDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = InputDelegate.swift; sourceTree = "<group>"; };
+		E099AB0F215FF10D009166E1 /* APRSData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APRSData.swift; sourceTree = "<group>"; };
+		E099AB11215FFBA5009166E1 /* APRSParser.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APRSParser.swift; sourceTree = "<group>"; };
+		E0A0B4F821568FBD00DAB7BC /* KISS.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = KISS.swift; sourceTree = "<group>"; };
 		E0B9AF39215454BD00D7CEBE /* MontyAPRS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MontyAPRS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0B9AF3C215454BD00D7CEBE /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0B9AF3E215454BD00D7CEBE /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -41,18 +66,22 @@
 		E0B9AF45215454BF00D7CEBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0B9AF46215454BF00D7CEBE /* MontyAPRS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MontyAPRS.entitlements; sourceTree = "<group>"; };
 		E0B9AF4B215454BF00D7CEBE /* MontyAPRSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MontyAPRSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E0B9AF4F215454BF00D7CEBE /* MontyAPRSTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MontyAPRSTests.swift; sourceTree = "<group>"; };
-		E0B9AF51215454BF00D7CEBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0B9AF56215454BF00D7CEBE /* MontyAPRSUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MontyAPRSUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		E0B9AF5A215454BF00D7CEBE /* MontyAPRSUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MontyAPRSUITests.swift; sourceTree = "<group>"; };
-		E0B9AF5C215454BF00D7CEBE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E026740B2157F920006310FC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E0B9AF36215454BD00D7CEBE /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E02674032156A5BE006310FC /* CocoaAsyncSocket.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -73,13 +102,53 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		093DEBEC8D7EBD82DE20F23E /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				E02674022156A5BE006310FC /* CocoaAsyncSocket.framework */,
+				BBD91CB4663F0EDD561E74D3 /* Pods_MontyAPRS.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		38C346130BD025B87B40C142 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				830834C1F8BCCBA13A5A62AA /* Pods-MontyAPRS.debug.xcconfig */,
+				42FC40ED9D6A9C83466F6108 /* Pods-MontyAPRS.release.xcconfig */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		E099AB0B215FEEF4009166E1 /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				E099AB0C215FEEF4009166E1 /* InputDelegate.swift */,
+				E099AB0F215FF10D009166E1 /* APRSData.swift */,
+				E099AB11215FFBA5009166E1 /* APRSParser.swift */,
+				E03C8A54216087C70072016B /* APRSPlotter.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		E099AB0E215FEF0B009166E1 /* Parsers */ = {
+			isa = PBXGroup;
+			children = (
+				E0A0B4F821568FBD00DAB7BC /* KISS.swift */,
+				E02674062157291F006310FC /* AX25.swift */,
+				E099AB05215B23A0009166E1 /* APRSBeacon.swift */,
+			);
+			name = Parsers;
+			path = MontyAPRS/Parsers;
+			sourceTree = SOURCE_ROOT;
+		};
 		E0B9AF30215454BD00D7CEBE = {
 			isa = PBXGroup;
 			children = (
 				E0B9AF3B215454BD00D7CEBE /* MontyAPRS */,
-				E0B9AF4E215454BF00D7CEBE /* MontyAPRSTests */,
-				E0B9AF59215454BF00D7CEBE /* MontyAPRSUITests */,
 				E0B9AF3A215454BD00D7CEBE /* Products */,
+				38C346130BD025B87B40C142 /* Pods */,
+				093DEBEC8D7EBD82DE20F23E /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -89,6 +158,7 @@
 				E0B9AF39215454BD00D7CEBE /* MontyAPRS.app */,
 				E0B9AF4B215454BF00D7CEBE /* MontyAPRSTests.xctest */,
 				E0B9AF56215454BF00D7CEBE /* MontyAPRSUITests.xctest */,
+				E026740E2157F920006310FC /* KISSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,38 +172,42 @@
 				E0B9AF42215454BF00D7CEBE /* Main.storyboard */,
 				E0B9AF45215454BF00D7CEBE /* Info.plist */,
 				E0B9AF46215454BF00D7CEBE /* MontyAPRS.entitlements */,
+				E099AB0E215FEF0B009166E1 /* Parsers */,
+				E099AB0B215FEEF4009166E1 /* Protocols */,
 			);
 			path = MontyAPRS;
-			sourceTree = "<group>";
-		};
-		E0B9AF4E215454BF00D7CEBE /* MontyAPRSTests */ = {
-			isa = PBXGroup;
-			children = (
-				E0B9AF4F215454BF00D7CEBE /* MontyAPRSTests.swift */,
-				E0B9AF51215454BF00D7CEBE /* Info.plist */,
-			);
-			path = MontyAPRSTests;
-			sourceTree = "<group>";
-		};
-		E0B9AF59215454BF00D7CEBE /* MontyAPRSUITests */ = {
-			isa = PBXGroup;
-			children = (
-				E0B9AF5A215454BF00D7CEBE /* MontyAPRSUITests.swift */,
-				E0B9AF5C215454BF00D7CEBE /* Info.plist */,
-			);
-			path = MontyAPRSUITests;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E026740D2157F920006310FC /* KISSTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E02674152157F920006310FC /* Build configuration list for PBXNativeTarget "KISSTests" */;
+			buildPhases = (
+				E026740A2157F920006310FC /* Sources */,
+				E026740B2157F920006310FC /* Frameworks */,
+				E026740C2157F920006310FC /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E02674142157F920006310FC /* PBXTargetDependency */,
+			);
+			name = KISSTests;
+			productName = KISSTests;
+			productReference = E026740E2157F920006310FC /* KISSTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E0B9AF38215454BD00D7CEBE /* MontyAPRS */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E0B9AF5F215454BF00D7CEBE /* Build configuration list for PBXNativeTarget "MontyAPRS" */;
 			buildPhases = (
+				7BDB0F8F2B968E930A79AEB1 /* [CP] Check Pods Manifest.lock */,
 				E0B9AF35215454BD00D7CEBE /* Sources */,
 				E0B9AF36215454BD00D7CEBE /* Frameworks */,
 				E0B9AF37215454BD00D7CEBE /* Resources */,
+				55D873A3811A044AC39B0DE2 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -190,6 +264,10 @@
 				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "Benjamin Montgomery";
 				TargetAttributes = {
+					E026740D2157F920006310FC = {
+						CreatedOnToolsVersion = 10.0;
+						TestTargetID = E0B9AF38215454BD00D7CEBE;
+					};
 					E0B9AF38215454BD00D7CEBE = {
 						CreatedOnToolsVersion = 10.0;
 					};
@@ -204,7 +282,7 @@
 				};
 			};
 			buildConfigurationList = E0B9AF34215454BD00D7CEBE /* Build configuration list for PBXProject "MontyAPRS" */;
-			compatibilityVersion = "Xcode 9.3";
+			compatibilityVersion = "Xcode 10.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -219,11 +297,19 @@
 				E0B9AF38215454BD00D7CEBE /* MontyAPRS */,
 				E0B9AF4A215454BF00D7CEBE /* MontyAPRSTests */,
 				E0B9AF55215454BF00D7CEBE /* MontyAPRSUITests */,
+				E026740D2157F920006310FC /* KISSTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E026740C2157F920006310FC /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E0B9AF37215454BD00D7CEBE /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -249,13 +335,66 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		55D873A3811A044AC39B0DE2 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${SRCROOT}/Pods/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/CocoaAsyncSocket.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		7BDB0F8F2B968E930A79AEB1 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-MontyAPRS-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
+		E026740A2157F920006310FC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E0B9AF35215454BD00D7CEBE /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E03C8A55216087C70072016B /* APRSPlotter.swift in Sources */,
 				E0B9AF3F215454BD00D7CEBE /* ViewController.swift in Sources */,
+				E099AB10215FF10D009166E1 /* APRSData.swift in Sources */,
 				E0B9AF3D215454BD00D7CEBE /* AppDelegate.swift in Sources */,
+				E099AB06215B23A0009166E1 /* APRSBeacon.swift in Sources */,
+				E099AB0D215FEEF4009166E1 /* InputDelegate.swift in Sources */,
+				E0A0B4F921568FBD00DAB7BC /* KISS.swift in Sources */,
+				E099AB12215FFBA5009166E1 /* APRSParser.swift in Sources */,
+				E02674072157291F006310FC /* AX25.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -263,7 +402,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E0B9AF50215454BF00D7CEBE /* MontyAPRSTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -271,13 +409,17 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E0B9AF5B215454BF00D7CEBE /* MontyAPRSUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E02674142157F920006310FC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = E0B9AF38215454BD00D7CEBE /* MontyAPRS */;
+			targetProxy = E02674132157F920006310FC /* PBXContainerItemProxy */;
+		};
 		E0B9AF4D215454BF00D7CEBE /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E0B9AF38215454BD00D7CEBE /* MontyAPRS */;
@@ -302,6 +444,44 @@
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
+		E02674162157F920006310FC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = KISSTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = montynet.org.KISSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MontyAPRS.app/Contents/MacOS/MontyAPRS";
+			};
+			name = Debug;
+		};
+		E02674172157F920006310FC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				COMBINE_HIDPI_IMAGES = YES;
+				INFOPLIST_FILE = KISSTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../Frameworks",
+					"@loader_path/../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = montynet.org.KISSTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 4.2;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MontyAPRS.app/Contents/MacOS/MontyAPRS";
+			};
+			name = Release;
+		};
 		E0B9AF5D215454BF00D7CEBE /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -419,9 +599,9 @@
 		};
 		E0B9AF60215454BF00D7CEBE /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 830834C1F8BCCBA13A5A62AA /* Pods-MontyAPRS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MontyAPRS/MontyAPRS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MontyAPRS/Info.plist;
@@ -437,9 +617,9 @@
 		};
 		E0B9AF61215454BF00D7CEBE /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 42FC40ED9D6A9C83466F6108 /* Pods-MontyAPRS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
-				CODE_SIGN_ENTITLEMENTS = MontyAPRS/MontyAPRS.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = MontyAPRS/Info.plist;
@@ -534,6 +714,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E02674152157F920006310FC /* Build configuration list for PBXNativeTarget "KISSTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E02674162157F920006310FC /* Debug */,
+				E02674172157F920006310FC /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E0B9AF34215454BD00D7CEBE /* Build configuration list for PBXProject "MontyAPRS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
