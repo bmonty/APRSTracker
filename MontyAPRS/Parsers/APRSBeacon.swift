@@ -21,11 +21,17 @@ struct APRSBeaconData: APRSData {
 
 struct APRSBeaconInfo {
     var station: String
+    var destination: String
+    var digipeaters: [String]?
+    var message: String?
     var timeStamp: Date
     var position: CLLocationCoordinate2D
     
-    init(station: String, position: CLLocationCoordinate2D) {
+    init(station: String, destination: String, digipeaters: [String]?, message: String?, position: CLLocationCoordinate2D) {
         self.station = station
+        self.destination = destination
+        self.digipeaters = digipeaters
+        self.message = message
         self.position = position
         self.timeStamp = Date()
     }
@@ -33,6 +39,7 @@ struct APRSBeaconInfo {
 
 enum APRSBeaconParseError: Error {
     case invalidPositionInfo
+    case invalidMessage
 }
 
 class APRSBeacon: APRSParser {
@@ -57,11 +64,12 @@ class APRSBeacon: APRSParser {
     
     private func parse(frame: AX25Frame) {
         var position: CLLocationCoordinate2D
+        var message: String
         
         switch frame.informationType {
         case "!", "=":
             do {
-                try position = parsePositionWithoutTimestamp(info: frame.information)
+                try (position, message) = parsePositionWithoutTimestamp(info: frame.information)
             } catch {
                 return
             }
@@ -69,14 +77,14 @@ class APRSBeacon: APRSParser {
             return
         }
         
-        let aprsResult = APRSBeaconInfo(station: frame.source, position: position)
-        plotter?.receivePosition(beacon: aprsResult)
+        let aprsResult = APRSBeaconInfo(station: frame.source, destination: frame.destination, digipeaters: frame.digipeaters, message: message, position: position)
+        plotter?.receiveBeacon(beacon: aprsResult)
         
         let aprsBeaconData = APRSBeaconData(data: aprsResult)
         delegate?.receivedData(data: aprsBeaconData)
     }
     
-    private func parsePositionWithoutTimestamp(info: String) throws -> CLLocationCoordinate2D {
+    private func parsePositionWithoutTimestamp(info: String) throws -> (CLLocationCoordinate2D, String) {
         // don't parse info that starts with "!!"
         if info[info.index(info.startIndex, offsetBy: 1)] == "!" { throw APRSBeaconParseError.invalidPositionInfo }
         if info[info.index(info.startIndex, offsetBy: 1)] == "/" { throw APRSBeaconParseError.invalidPositionInfo }
@@ -114,7 +122,12 @@ class APRSBeacon: APRSParser {
         if longDirection == "W" { long = long * -1.0 }
         let position = CLLocationCoordinate2D(latitude: lat, longitude: long)
         
-        return position
+        // get message
+        start = info.index(info.startIndex, offsetBy: 19)
+        end = info.index(info.endIndex, offsetBy: -1)
+        let message = String(info[start...end])
+        
+        return (position, message)
     }
 }
 
