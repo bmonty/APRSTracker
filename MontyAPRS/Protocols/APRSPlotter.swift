@@ -9,5 +9,5 @@
 import Foundation
 
 protocol APRSPlotter {
-    func receivePosition(beacon: APRSBeaconInfo)
+    func receiveBeacon(beacon: APRSBeaconInfo)
 }
