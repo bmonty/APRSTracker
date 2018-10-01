@@ -47,7 +47,7 @@ struct APRSBeaconInfo {
 }
 
 enum APRSBeaconParseError: Error {
-    case invalidPositionInfo
+    case invalidPosition
     case invalidMessage
     case invalidTimestamp
 }
@@ -107,8 +107,8 @@ class APRSBeacon: APRSParser {
     
     private func parsePositionWithoutTimestamp(_ info: String) throws -> (CLLocationCoordinate2D, String) {
         // don't parse info that starts with "!!"
-        if info[info.index(info.startIndex, offsetBy: 1)] == "!" { throw APRSBeaconParseError.invalidPositionInfo }
-        if info[info.index(info.startIndex, offsetBy: 1)] == "/" { throw APRSBeaconParseError.invalidPositionInfo }
+        if info[info.index(info.startIndex, offsetBy: 1)] == "!" { throw APRSBeaconParseError.invalidPosition }
+        if info[info.index(info.startIndex, offsetBy: 1)] == "/" { throw APRSBeaconParseError.invalidPosition }
         
         do {
             let (position, message) = try parsePositionAndMessage(info)
@@ -205,12 +205,12 @@ class APRSBeacon: APRSParser {
         // get the latitude degrees
         var start = info.startIndex
         var end = info.index(info.startIndex, offsetBy: 1)
-        guard let latDegrees = Int(String(info[start...end])) else { throw APRSBeaconParseError.invalidPositionInfo }
+        guard let latDegrees = Int(String(info[start...end])) else { throw APRSBeaconParseError.invalidPosition }
 
         // get the latitude minutes
         start = info.index(info.startIndex, offsetBy: 2)
         end = info.index(info.startIndex, offsetBy: 6)
-        guard let latMinutes = Double(String(info[start...end])) else { throw APRSBeaconParseError.invalidPositionInfo }
+        guard let latMinutes = Double(String(info[start...end])) else { throw APRSBeaconParseError.invalidPosition }
 
         // get the latitude direction, N or S
         let latDirection = String(info[info.index(info.startIndex, offsetBy: 7)])
@@ -218,12 +218,12 @@ class APRSBeacon: APRSParser {
         // get the longitude degrees
         start = info.index(info.startIndex, offsetBy: 9)
         end = info.index(info.startIndex, offsetBy: 11)
-        guard let longDegrees = Int(String(info[start...end])) else { throw APRSBeaconParseError.invalidPositionInfo }
+        guard let longDegrees = Int(String(info[start...end])) else { throw APRSBeaconParseError.invalidPosition }
 
         // get the longitude minutes
         start = info.index(info.startIndex, offsetBy: 12)
         end = info.index(info.startIndex, offsetBy: 16)
-        guard let longMinutes = Double(String(info[start...end])) else { throw APRSBeaconParseError.invalidPositionInfo }
+        guard let longMinutes = Double(String(info[start...end])) else { throw APRSBeaconParseError.invalidPosition }
 
         // get the longitude direction, E or W
         let longDirection = String(info[info.index(info.startIndex, offsetBy: 17)])
