@@ -10,38 +10,40 @@ import XCTest
 import MapKit
 @testable import MontyAPRS
 
-class ParserMock: APRSParser {
-
-    var delegate: InputDelegate?
-
-    func start() -> Bool {
-        return true
-    }
-
-    func stop() {
-        return
-    }
-
-}
-
-class APRSPlotterMock: APRSPlotter {
-    var didReceiveBeaconClosure: ((APRSBeaconInfo) -> Void)?
-
-    func receiveBeacon(beacon: APRSBeaconInfo) {
-        didReceiveBeaconClosure?(beacon)
-    }
-}
-
 class APRSBeaconTests: XCTestCase {
 
+    class APRSParserMock: APRSParser {
+
+        var delegate: InputDelegate?
+
+        func start() -> Bool {
+            return true
+        }
+
+        func stop() {
+            return
+        }
+
+    }
+
+    class APRSPlotterMock: APRSPlotter {
+
+        var didReceiveBeaconClosure: ((APRSBeaconInfo) -> Void)?
+
+        func receiveBeacon(beacon: APRSBeaconInfo) {
+            didReceiveBeaconClosure?(beacon)
+        }
+        
+    }
+
     var testBeacon: APRSBeacon!
-    var parserTester: ParserMock!
+    var parserTester: APRSParserMock!
 
     override func setUp() {
-        parserTester = ParserMock()
-        testBeacon = APRSBeacon(withInput: parserTester)
-
         super.setUp()
+
+        parserTester = APRSParserMock()
+        testBeacon = APRSBeacon(withInput: parserTester)
     }
 
     override func tearDown() {
@@ -161,6 +163,33 @@ class APRSBeaconTests: XCTestCase {
             XCTAssertEqual(beaconDateComponents.minute, 45)
             XCTAssertEqual(beaconDateComponents.second, 17)
             XCTAssertEqual(beaconDateComponents.timeZone, TimeZone(identifier: "UTC"))
+
+            beaconExpectation.fulfill()
+        }
+
+        testBeacon.receivedData(data: testData)
+
+        waitForExpectations(timeout: 1.0)
+    }
+
+    func testParseOfCompressedPositionWithoutTimestamp() {
+        let testFrame = AX25Frame(source: "KG5YOV-9", destination: "TEST", digipeaters: ["WIDE1-1", "WIDE1-2"], informationType: "!", information: "/?VJo5Qz1$csTThis is a test.")
+        let testData = AX25Data(data: testFrame)
+
+        let beaconExpectation = expectation(description: "A beacon with compressed position is parsed correctly.")
+
+        let consumer = APRSPlotterMock()
+        testBeacon.plotter = consumer
+
+        consumer.didReceiveBeaconClosure = { beacon in
+            // check basic beacon info
+            XCTAssertEqual(beacon.station, testFrame.source)
+            XCTAssertEqual(beacon.destination, testFrame.destination)
+            XCTAssertEqual(beacon.message, "This is a test.")
+
+            // check position info
+            XCTAssertEqual(beacon.position.latitude, 29.49)
+            XCTAssertEqual(beacon.position.longitude, -98.74)
 
             beaconExpectation.fulfill()
         }

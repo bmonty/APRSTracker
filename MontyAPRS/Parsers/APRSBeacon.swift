@@ -108,8 +108,18 @@ class APRSBeacon: APRSParser {
     private func parsePositionWithoutTimestamp(_ info: String) throws -> (CLLocationCoordinate2D, String) {
         // don't parse info that starts with "!!"
         if info[info.index(info.startIndex, offsetBy: 1)] == "!" { throw APRSBeaconParseError.invalidPosition }
-        if info[info.index(info.startIndex, offsetBy: 1)] == "/" { throw APRSBeaconParseError.invalidPosition }
-        
+
+        // if the position info starts with "/", it's a compressed report
+        if info[info.startIndex] == "/" {
+            do {
+                let (position, message) = try parseCompressedPositionAndMessage(info)
+                return (position, message)
+            } catch {
+                throw error
+            }
+        }
+
+        // parse as an uncompressed report
         do {
             let (position, message) = try parsePositionAndMessage(info)
             return (position, message)
@@ -237,6 +247,41 @@ class APRSBeacon: APRSParser {
 
         // get message
         start = info.index(info.startIndex, offsetBy: 19)
+        end = info.index(info.endIndex, offsetBy: -1)
+        let message = String(info[start...end])
+
+        return (position, message)
+    }
+
+    func parseCompressedPositionAndMessage(_ info: String) throws -> (CLLocationCoordinate2D, String) {
+        // decode latitude
+        var start = info.index(info.startIndex, offsetBy: 1)
+        var end = info.index(info.startIndex, offsetBy: 4)
+        let latBytes = String(info[start...end]).utf8.map{ UInt8($0) }
+        var sum: Decimal = 0
+        for i in 0...3 {
+            sum += (Decimal(latBytes[i]) - 33) * pow(91, 3 - i)
+        }
+        let lat = Double(truncating: (90 - sum / 380926) as NSNumber)
+
+        // decode longitude
+        start = info.index(info.startIndex, offsetBy: 5)
+        end = info.index(info.startIndex, offsetBy: 8)
+        let longBytes = String(info[start...end]).utf8.map{ UInt8($0) }
+        var longSum: Decimal = 0
+        for i in 0...3 {
+            longSum += (Decimal(longBytes[i]) - 33) * pow(91, 3 - i)
+        }
+        let long = Double(truncating: (-180 + longSum / 190463) as NSNumber)
+
+        // get lat/long to 2 decimal places
+        let finalLat = Double(String(format: "%.2f", lat))!
+        let finalLong = Double(String(format: "%.2f", long))!
+
+        let position = CLLocationCoordinate2D(latitude: finalLat, longitude: finalLong)
+
+        // get message
+        start = info.index(info.startIndex, offsetBy: 13)
         end = info.index(info.endIndex, offsetBy: -1)
         let message = String(info[start...end])
 
