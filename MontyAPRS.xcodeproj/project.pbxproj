@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9994E24D6BCDF750DF4473D9 /* Pods_MontyAPRS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBD91CB4663F0EDD561E74D3 /* Pods_MontyAPRS.framework */; };
 		E01C7344216D88F90000E137 /* AX25.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01C7343216D88F90000E137 /* AX25.swift */; };
 		E02674032156A5BE006310FC /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E02674022156A5BE006310FC /* CocoaAsyncSocket.framework */; };
 		E03C8A55216087C70072016B /* APRSPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C8A54216087C70072016B /* APRSPlotter.swift */; };
@@ -67,6 +68,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E02674032156A5BE006310FC /* CocoaAsyncSocket.framework in Frameworks */,
+				9994E24D6BCDF750DF4473D9 /* Pods_MontyAPRS.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -143,10 +145,10 @@
 			children = (
 				E0B9AF3B215454BD00D7CEBE /* MontyAPRS */,
 				E0E9C9302161893A0010E1A5 /* MontyAPRSTests */,
+				E01C7340216D88900000E137 /* Playgrounds */,
 				E0B9AF3A215454BD00D7CEBE /* Products */,
 				38C346130BD025B87B40C142 /* Pods */,
 				093DEBEC8D7EBD82DE20F23E /* Frameworks */,
-				E01C7340216D88900000E137 /* Playgrounds */,
 			);
 			sourceTree = "<group>";
 		};
@@ -289,7 +291,7 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS-frameworks.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/CocoaAsyncSocket/CocoaAsyncSocket.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
@@ -298,7 +300,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		7BDB0F8F2B968E930A79AEB1 /* [CP] Check Pods Manifest.lock */ = {
