@@ -9,6 +9,37 @@
 import Foundation
 import MapKit
 
+let latDigits: [String: (Int, Int, String, Int, String)] =
+    ["0": (0, 0, "S", 0, "E"), "1": (1, 0, "S", 0, "E"), "2": (2, 0, "S", 0, "E"),
+     "3": (3, 0, "S", 0, "E"), "4": (4, 0, "S", 0, "E"), "5": (5, 0, "S", 0, "E"),
+     "6": (6, 0, "S", 0, "E"), "7": (7, 0, "S", 0, "E"), "8": (8, 0, "S", 0, "E"),
+     "9": (9, 0, "S", 0, "E"), "A": (0, 1, " ", 0, " "), "B": (1, 1, " ", 0, " "),
+     "C": (2, 1, " ", 0, " "), "D": (3, 1, " ", 0, " "), "E": (4, 1, " ", 0, " "),
+     "F": (5, 1, " ", 0, " "), "G": (6, 1, " ", 0, " "), "H": (7, 1, " ", 0, " "),
+     "I": (8, 1, " ", 0, " "), "J": (9, 1, " ", 0, " "), /*"K": " ", "L": " ",*/
+     "P": (0, 1, "N", 100, "W"), "Q": (1, 1, "N", 100, "W"),
+     "R": (2, 1, "N", 100, "W"), "S": (3, 1, "N", 100, "W"),
+     "T": (4, 1, "N", 100, "W"), "U": (5, 1, "N", 100, "W"),
+     "V": (6, 1, "N", 100, "W"), "W": (7, 1, "N", 100, "W"),
+     "X": (8, 1, "N", 100, "W"), "Y": (9, 1, "N", 100, "W"), /*"Z": " "*/]
+
+let micEmessageType: [String: String] = [
+    "111": "Off Duty",
+    "110": "En Route",
+    "101": "In Service",
+    "100": "Returning",
+    "011": "Committed",
+    "010": "Special",
+    "001": "Priority",
+    "000": "Emergency"
+]
+
+enum micEAPRSDataType {
+    case currentData
+    case oldData
+    case unknown
+}
+
 struct APRSBeaconData: APRSData {
     typealias APRSDataElement = APRSBeaconInfo
     var protocolName = "APRS_BEACON_INFO"
@@ -94,10 +125,30 @@ class APRSBeacon: APRSParser {
                 return
             }
 
+        // Mic-E
+        case "'", "`":
+             //let type where UInt8(type) == 0x1C,
+             //let type where UInt8(type) == 0x1D:
+            do {
+                let data = try parseMicE(destination: frame.destination, info: frame.information)
+
+                guard let position = data["position"] as? CLLocationCoordinate2D else {
+                    return
+                }
+
+                guard let message = data["message"] as? String else {
+                    return
+                }
+
+                aprsResult = APRSBeaconInfo(station: frame.source, destination: frame.destination, digipeaters: frame.digipeaters, message: message, position: position)
+            } catch {
+                return
+            }
+
         default:
             return
         }
-        
+
         // send the parsed beacon to a plotter
         plotter?.receiveBeacon(beacon: aprsResult)
         
@@ -286,6 +337,115 @@ class APRSBeacon: APRSParser {
         let message = String(info[start...end])
 
         return (position, message)
+    }
+
+    func parseMicE(destination: String, info: String) throws -> Dictionary<String, Any> {
+        var data: [String: Any] = [:]
+
+        // decode latitude
+        var destLatDigitDecode = [Int]()
+        for i in 0...5 {
+            let sub = String(destination[destination.index(destination.startIndex, offsetBy: i)])
+            guard let num = latDigits[sub]?.0 else { throw APRSBeaconParseError.invalidPosition }
+            destLatDigitDecode.append(num)
+        }
+
+        let latDegree: Int = (destLatDigitDecode[0] * 10) + destLatDigitDecode[1]
+        let latMinute: Double = (Double(String("\(destLatDigitDecode[2])\(destLatDigitDecode[3]).\(destLatDigitDecode[4])\(destLatDigitDecode[5])")))!
+        let latDirection = (latDigits[String(destination[destination.index(destination.startIndex, offsetBy: 3)])]?.2)!
+        var latitude = Double(latDegree) + (latMinute / 60)
+        if latDirection == "S" {
+            latitude = -latitude
+        }
+
+        // decode longitude offset
+        let longitudeOffset = (latDigits[String(destination[destination.index(destination.startIndex, offsetBy: 4)])]?.3)!
+
+        // decode longitude direction (East or West)
+        let longDirection = (latDigits[String(destination[destination.index(destination.startIndex, offsetBy: 3)])]?.4)!
+
+        // decode longitude value
+        var s = info[info.index(info.startIndex, offsetBy: 1)].unicodeScalars
+        var longitudeDecimal = Int(s[s.startIndex].value) - 28
+        if longitudeOffset > 0 {
+            longitudeDecimal += longitudeOffset
+        }
+
+        // decode longitude minute value
+        s = info[info.index(info.startIndex, offsetBy: 2)].unicodeScalars
+        var longitudeMinuteInt = Int(s[s.startIndex].value) - 28
+        if longitudeMinuteInt >= 60 {
+            longitudeMinuteInt -= 60
+        }
+
+        // decode the longitude hundreths of a minute value
+        s = info[info.index(info.startIndex, offsetBy: 3)].unicodeScalars
+        let longitudeHundrethMinute = Double((Int(s[s.startIndex].value) - 28)) / 100
+
+        var longitude = Double(longitudeDecimal) + ((Double(longitudeMinuteInt) + longitudeHundrethMinute) / 60)
+        if longDirection == "W" {
+            longitude = -longitude
+        }
+
+        // create the position object
+        let position = CLLocationCoordinate2D(latitude: latitude, longitude: longitude)
+        data["position"] = position
+
+        // decode message type
+        var messageType: String = ""
+        for i in 0...2 {
+            let sub = String(destination[destination.index(destination.startIndex, offsetBy: i)])
+            let digit = (latDigits[sub]?.1)!
+            messageType.append(String(digit))
+        }
+        data["message_type"] = micEmessageType[messageType]
+
+        // get APRS data type identifier
+        switch info[info.index(info.startIndex, offsetBy: 0)] {
+        case "`":
+            data["aprs_data_type"] = micEAPRSDataType.currentData
+        case "'":
+            data["aprs_data_type"] = micEAPRSDataType.oldData
+        default:
+            data["aprs_data_type"] = micEAPRSDataType.unknown
+        }
+
+        // decode speed
+        s = info[info.index(info.startIndex, offsetBy: 4)].unicodeScalars
+        var speedTen = Int(s[s.startIndex].value) - 28
+        if speedTen >= 80 {
+            speedTen -= 80
+        }
+        speedTen *= 10
+
+        // decode course
+        s = info[info.index(info.startIndex, offsetBy: 5)].unicodeScalars
+        let dcByte = Int(s[s.startIndex].value) - 28
+        let speedOnes = dcByte / 10
+
+        data["speed"] = speedTen + speedOnes
+
+        let courseHundreds = ((dcByte % 10) - 4) * 100
+
+        s = info[info.index(info.startIndex, offsetBy: 6)].unicodeScalars
+        let courseOnes = Int(s[s.startIndex].value) - 28
+
+        data["course"] = courseHundreds + courseOnes
+
+        // get symbol info
+        var symbol = ""
+        for i in 7...8 {
+            let sym = String(info[info.index(info.startIndex, offsetBy: i)])
+            symbol.append(sym)
+        }
+        data["symbol"] = symbol
+
+        // TODO: add telemetry decoding, byte 9 is the telemetry flag
+
+        // get message
+        data["message"] = info[info.index(info.startIndex, offsetBy: 9)...]
+
+        return data
     }
 }
 
