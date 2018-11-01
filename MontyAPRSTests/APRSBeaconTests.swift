@@ -198,4 +198,42 @@ class APRSBeaconTests: XCTestCase {
 
         waitForExpectations(timeout: 1.0)
     }
+
+    func testParseOfMicE() {
+        /* N5NTG-4>2Y3S4V,WA5LNL-3,WIDE1*,WIDE2-1:`~9'mJD>/'SAHams.org|3
+        MIC-E, normal car (side view), Byonics TinyTrack3, Special
+        N 29 33.4600, W 098 29.1100, 16 MPH, course 240
+        SAHams.org */
+        let testFrame = AX25Frame(source: "KG5YOV-9", destination: "2Y3S4V", digipeaters: ["WIDE1-1", "WIDE1-2"], informationType: "`", information: "~9'mJD>/'SAHams.org|3")
+        let testData = AX25Data(data: testFrame)
+
+        let beaconExpectation = expectation(description: "A Mic-E beacon is parsed correctly.")
+
+        let consumer = APRSPlotterMock()
+        testBeacon.plotter = consumer
+
+        consumer.didReceiveBeaconClosure = { beacon in
+            // check basic beacon info
+            XCTAssertEqual(beacon.station, testFrame.source)
+            XCTAssertEqual(beacon.destination, testFrame.destination)
+            XCTAssertEqual(beacon.message, "'SAHams.org|3")
+
+            // check position info
+            XCTAssertEqual(beacon.position.latitude, 29.5577)
+            XCTAssertEqual(beacon.position.longitude, -98.4852)
+
+            // check speed and course
+            XCTAssertEqual(beacon.speed, 14)
+            XCTAssertEqual(beacon.course, 240)
+
+            XCTAssertEqual(beacon.symbol, ">/")
+            XCTAssertEqual(beacon.aprsDataType, micEAPRSDataType.currentData)
+
+            beaconExpectation.fulfill()
+        }
+
+        testBeacon.receivedData(data: testData)
+
+        waitForExpectations(timeout: 1.0)
+    }
 }
