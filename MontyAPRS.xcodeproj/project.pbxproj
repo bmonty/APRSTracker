@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		9994E24D6BCDF750DF4473D9 /* Pods_MontyAPRS.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = BBD91CB4663F0EDD561E74D3 /* Pods_MontyAPRS.framework */; };
+		E00FED71218E7ED500EF2FEE /* AprsIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FED70218E7ED500EF2FEE /* AprsIcons.swift */; };
 		E01C7344216D88F90000E137 /* AX25.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01C7343216D88F90000E137 /* AX25.swift */; };
 		E02674032156A5BE006310FC /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E02674022156A5BE006310FC /* CocoaAsyncSocket.framework */; };
 		E03C8A55216087C70072016B /* APRSPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C8A54216087C70072016B /* APRSPlotter.swift */; };
@@ -39,6 +40,8 @@
 		42FC40ED9D6A9C83466F6108 /* Pods-MontyAPRS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MontyAPRS.release.xcconfig"; path = "Pods/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS.release.xcconfig"; sourceTree = "<group>"; };
 		830834C1F8BCCBA13A5A62AA /* Pods-MontyAPRS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-MontyAPRS.debug.xcconfig"; path = "Pods/Target Support Files/Pods-MontyAPRS/Pods-MontyAPRS.debug.xcconfig"; sourceTree = "<group>"; };
 		BBD91CB4663F0EDD561E74D3 /* Pods_MontyAPRS.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_MontyAPRS.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		E00FED70218E7ED500EF2FEE /* AprsIcons.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AprsIcons.swift; sourceTree = "<group>"; };
+		E00FED73218F14D100EF2FEE /* AprsIcons.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = AprsIcons.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E01C733F216D88900000E137 /* APRS Mic-E Parsing.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "APRS Mic-E Parsing.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E01C7343216D88F90000E137 /* AX25.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AX25.swift; sourceTree = "<group>"; };
 		E02674022156A5BE006310FC /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -103,6 +106,7 @@
 		E01C7340216D88900000E137 /* Playgrounds */ = {
 			isa = PBXGroup;
 			children = (
+				E00FED73218F14D100EF2FEE /* AprsIcons.playground */,
 				E01C733F216D88900000E137 /* APRS Mic-E Parsing.playground */,
 			);
 			name = Playgrounds;
@@ -164,12 +168,13 @@
 		E0B9AF3B215454BD00D7CEBE /* MontyAPRS */ = {
 			isa = PBXGroup;
 			children = (
+				E0B9AF45215454BF00D7CEBE /* Info.plist */,
+				E0B9AF46215454BF00D7CEBE /* MontyAPRS.entitlements */,
+				E0B9AF40215454BF00D7CEBE /* Assets.xcassets */,
 				E0B9AF3C215454BD00D7CEBE /* AppDelegate.swift */,
 				E0B9AF3E215454BD00D7CEBE /* ViewController.swift */,
 				E098578E21853AFD005DA024 /* PreferencesViewController.swift */,
-				E0B9AF40215454BF00D7CEBE /* Assets.xcassets */,
-				E0B9AF45215454BF00D7CEBE /* Info.plist */,
-				E0B9AF46215454BF00D7CEBE /* MontyAPRS.entitlements */,
+				E00FED70218E7ED500EF2FEE /* AprsIcons.swift */,
 				E098578B218525DE005DA024 /* Storyboards */,
 				E099AB0E215FEF0B009166E1 /* Parsers */,
 				E099AB0B215FEEF4009166E1 /* Protocols */,
@@ -337,6 +342,7 @@
 				E099AB06215B23A0009166E1 /* APRSBeacon.swift in Sources */,
 				E099AB0D215FEEF4009166E1 /* InputDelegate.swift in Sources */,
 				E0A0B4F921568FBD00DAB7BC /* KISS.swift in Sources */,
+				E00FED71218E7ED500EF2FEE /* AprsIcons.swift in Sources */,
 				E099AB12215FFBA5009166E1 /* APRSParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
