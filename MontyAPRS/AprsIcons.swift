@@ -68,7 +68,6 @@ public class AprsIcon {
         } else {
             column = (symbolsIndex % 16) - 1
         }
-        print("row = \(row), column = \(column)")
 
         // create new image by cropping the symbol table
         let cropRect = NSRect(x: column * 24, y: row * 24, width: 24, height: 24)
