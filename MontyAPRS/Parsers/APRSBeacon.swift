@@ -9,7 +9,7 @@
 import Foundation
 import MapKit
 
-let latDigits: [String: (Int, Int, String, Int, String)] =
+let micEDestAddressEncoding: [String: (Int, Int, String, Int, String)] =
     ["0": (0, 0, "S", 0, "E"), "1": (1, 0, "S", 0, "E"), "2": (2, 0, "S", 0, "E"),
      "3": (3, 0, "S", 0, "E"), "4": (4, 0, "S", 0, "E"), "5": (5, 0, "S", 0, "E"),
      "6": (6, 0, "S", 0, "E"), "7": (7, 0, "S", 0, "E"), "8": (8, 0, "S", 0, "E"),
@@ -371,13 +371,13 @@ class APRSBeacon: APRSParser {
         var destLatDigitDecode = [Int]()
         for i in 0...5 {
             let sub = String(destination[destination.index(destination.startIndex, offsetBy: i)])
-            guard let num = latDigits[sub]?.0 else { throw APRSBeaconParseError.invalidPosition }
+            guard let num = micEDestAddressEncoding[sub]?.0 else { throw APRSBeaconParseError.invalidPosition }
             destLatDigitDecode.append(num)
         }
 
         let latDegree: Int = (destLatDigitDecode[0] * 10) + destLatDigitDecode[1]
         let latMinute: Double = (Double(String("\(destLatDigitDecode[2])\(destLatDigitDecode[3]).\(destLatDigitDecode[4])\(destLatDigitDecode[5])")))!
-        let latDirection = (latDigits[String(destination[destination.index(destination.startIndex, offsetBy: 3)])]?.2)!
+        let latDirection = (micEDestAddressEncoding[String(destination[destination.index(destination.startIndex, offsetBy: 3)])]?.2)!
         var latitude = Double(latDegree) + (latMinute / 60)
         if latDirection == "S" {
             latitude = -latitude
@@ -385,10 +385,10 @@ class APRSBeacon: APRSParser {
         latitude = roundToPlaces(latitude, toDecimalPlaces: 4)
 
         // decode longitude offset
-        let longitudeOffset = (latDigits[String(destination[destination.index(destination.startIndex, offsetBy: 4)])]?.3)!
+        let longitudeOffset = (micEDestAddressEncoding[String(destination[destination.index(destination.startIndex, offsetBy: 4)])]?.3)!
 
         // decode longitude direction (East or West)
-        let longDirection = (latDigits[String(destination[destination.index(destination.startIndex, offsetBy: 3)])]?.4)!
+        let longDirection = (micEDestAddressEncoding[String(destination[destination.index(destination.startIndex, offsetBy: 3)])]?.4)!
 
         // decode longitude degree value
         var s = info[info.startIndex].unicodeScalars
@@ -422,7 +422,7 @@ class APRSBeacon: APRSParser {
         var messageType: String = ""
         for i in 0...2 {
             let sub = String(destination[destination.index(destination.startIndex, offsetBy: i)])
-            let digit = (latDigits[sub]?.1)!
+            let digit = (micEDestAddressEncoding[sub]?.1)!
             messageType.append(String(digit))
         }
         data["message_type"] = micEmessageType[messageType]
