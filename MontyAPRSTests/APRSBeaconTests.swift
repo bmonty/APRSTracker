@@ -66,6 +66,7 @@ class APRSBeaconTests: XCTestCase {
             XCTAssertEqual(beacon.station, testFrame.source)
             XCTAssertEqual(beacon.destination, testFrame.destination)
             XCTAssertEqual(beacon.message, "This is a test.")
+            XCTAssertEqual(beacon.symbol, "/-")
 
             // check position info
             XCTAssertEqual(beacon.position.latitude, 49.05833333333333)
@@ -80,7 +81,7 @@ class APRSBeaconTests: XCTestCase {
     }
 
     func testParseOfPositionWithTimestampInZulu() {
-        let testFrame = AX25Frame(source: "KG5YOV-9", destination: "TEST", digipeaters: ["WIDE1-1", "WIDE1-2"], informationType: "@", information: "092345z4903.50N/07201.75W-This is a test.")
+        let testFrame = AX25Frame(source: "KG5YOV-9", destination: "TEST", digipeaters: ["WIDE1-1", "WIDE1-2"], informationType: "@", information: "092345z4903.50N/07201.75WkThis is a test.")
         let testData = AX25Data(data: testFrame)
 
         let beaconExpectation = expectation(description: "A beacon with position and timestamp in Zulu is parsed correctly.")
@@ -93,6 +94,7 @@ class APRSBeaconTests: XCTestCase {
             XCTAssertEqual(beacon.station, testFrame.source)
             XCTAssertEqual(beacon.destination, testFrame.destination)
             XCTAssertEqual(beacon.message, "This is a test.")
+            XCTAssertEqual(beacon.symbol, "/k")
 
             // check the timestamp info
             let calendar = Calendar.current
@@ -204,7 +206,7 @@ class APRSBeaconTests: XCTestCase {
         MIC-E, normal car (side view), Byonics TinyTrack3, Special
         N 29 33.4600, W 098 29.1100, 16 MPH, course 240
         SAHams.org */
-        let testFrame = AX25Frame(source: "KG5YOV-9", destination: "2Y3S4V", digipeaters: ["WIDE1-1", "WIDE1-2"], informationType: "`", information: "~9'mJD>/'SAHams.org|3")
+        let testFrame = AX25Frame(source: "KG5YOV-9", destination: "2Y3S4V", digipeaters: ["WIDE1-1", "WIDE1-2"], informationType: "`", information: "~9'mJD/>'SAHams.org|3")
         let testData = AX25Data(data: testFrame)
 
         let beaconExpectation = expectation(description: "A Mic-E beacon is parsed correctly.")
@@ -226,7 +228,7 @@ class APRSBeaconTests: XCTestCase {
             XCTAssertEqual(beacon.speed, 14)
             XCTAssertEqual(beacon.course, 240)
 
-            XCTAssertEqual(beacon.symbol, ">/")
+            XCTAssertEqual(beacon.symbol, "/>")
             XCTAssertEqual(beacon.aprsDataType, micEAPRSDataType.currentData)
 
             beaconExpectation.fulfill()

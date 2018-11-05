@@ -115,8 +115,9 @@ class APRSBeacon: APRSParser {
         // position without timestamp, with or without messaging
         case "!", "=":
             do {
-                let (position, message) =  try parsePositionWithoutTimestamp(frame.information)
+                let (position, message, symbol) =  try parsePositionWithoutTimestamp(frame.information)
                 aprsResult = APRSBeaconInfo(station: frame.source, destination: frame.destination, digipeaters: frame.digipeaters, message: message, position: position)
+                aprsResult.symbol = symbol
             } catch {
                 return
             }
@@ -124,8 +125,9 @@ class APRSBeacon: APRSParser {
         // position with timestamp, with or without messaging
         case "@", "/":
             do {
-                let (timestamp, position, message) = try parsePositionWithTimestamp(frame.information)
+                let (timestamp, position, message, symbol) = try parsePositionWithTimestamp(frame.information)
                 aprsResult = APRSBeaconInfo(station: frame.source, destination: frame.destination, digipeaters: frame.digipeaters, message: message, position: position, timestamp: timestamp)
+                aprsResult.symbol = symbol
             } catch {
                 return
             }
@@ -181,15 +183,15 @@ class APRSBeacon: APRSParser {
         delegate?.receivedData(data: aprsBeaconData)
     }
     
-    private func parsePositionWithoutTimestamp(_ info: String) throws -> (CLLocationCoordinate2D, String) {
+    private func parsePositionWithoutTimestamp(_ info: String) throws -> (CLLocationCoordinate2D, String, String) {
         // don't parse info that starts with "!!"
         if info[info.index(info.startIndex, offsetBy: 1)] == "!" { throw APRSBeaconParseError.invalidPosition }
 
         // if the position info starts with "/", it's a compressed report
         if info[info.startIndex] == "/" {
             do {
-                let (position, message) = try parseCompressedPositionAndMessage(info)
-                return (position, message)
+                let (position, message, symbol) = try parseCompressedPositionAndMessage(info)
+                return (position, message, symbol)
             } catch {
                 throw error
             }
@@ -197,14 +199,14 @@ class APRSBeacon: APRSParser {
 
         // parse as an uncompressed report
         do {
-            let (position, message) = try parsePositionAndMessage(info)
-            return (position, message)
+            let (position, message, symbol) = try parsePositionAndMessage(info)
+            return (position, message, symbol)
         } catch {
             throw error
         }
     }
 
-    private func parsePositionWithTimestamp(_ info: String) throws -> (Date, CLLocationCoordinate2D, String) {
+    private func parsePositionWithTimestamp(_ info: String) throws -> (Date, CLLocationCoordinate2D, String, String) {
         // get first number
         var start = info.startIndex
         var end = info.index(info.startIndex, offsetBy: 1)
@@ -280,14 +282,14 @@ class APRSBeacon: APRSParser {
         start = info.index(info.startIndex, offsetBy: 7)
         end = info.endIndex
         do {
-            let (position, message) = try parsePositionAndMessage(String(info[start..<end]))
-            return (beaconDate, position, message)
+            let (position, message, symbol) = try parsePositionAndMessage(String(info[start..<end]))
+            return (beaconDate, position, message, symbol)
         } catch {
             throw error
         }
     }
 
-    private func parsePositionAndMessage(_ info: String) throws -> (CLLocationCoordinate2D, String) {
+    private func parsePositionAndMessage(_ info: String) throws -> (CLLocationCoordinate2D, String, String) {
         // get the latitude degrees
         var start = info.startIndex
         var end = info.index(info.startIndex, offsetBy: 1)
@@ -300,6 +302,9 @@ class APRSBeacon: APRSParser {
 
         // get the latitude direction, N or S
         let latDirection = String(info[info.index(info.startIndex, offsetBy: 7)])
+
+        // get the symbol table
+        let symbolTable = String(info[info.index(info.startIndex, offsetBy: 8)])
 
         // get the longitude degrees
         start = info.index(info.startIndex, offsetBy: 9)
@@ -314,6 +319,9 @@ class APRSBeacon: APRSParser {
         // get the longitude direction, E or W
         let longDirection = String(info[info.index(info.startIndex, offsetBy: 17)])
 
+        // get the symbol code
+        let symbolCode = String(info[info.index(info.startIndex, offsetBy: 18)])
+
         // create the location coordinate
         var lat = Double(latDegrees) + (latMinutes / 60)
         if latDirection == "S" { lat = lat * -1.0 }
@@ -326,10 +334,14 @@ class APRSBeacon: APRSParser {
         end = info.index(info.endIndex, offsetBy: -1)
         let message = String(info[start...end])
 
-        return (position, message)
+        let symbol = symbolTable + symbolCode
+
+        return (position, message, symbol)
     }
 
-    func parseCompressedPositionAndMessage(_ info: String) throws -> (CLLocationCoordinate2D, String) {
+    func parseCompressedPositionAndMessage(_ info: String) throws -> (CLLocationCoordinate2D, String, String) {
+        let symbolTable = String(info[info.startIndex])
+
         // decode latitude
         var start = info.index(info.startIndex, offsetBy: 1)
         var end = info.index(info.startIndex, offsetBy: 4)
@@ -356,12 +368,16 @@ class APRSBeacon: APRSParser {
 
         let position = CLLocationCoordinate2D(latitude: finalLat, longitude: finalLong)
 
+        let symbolCode = String(info[info.index(info.startIndex, offsetBy: 9)])
+
+        let symbol = symbolTable + symbolCode
+
         // get message
         start = info.index(info.startIndex, offsetBy: 13)
         end = info.index(info.endIndex, offsetBy: -1)
         let message = String(info[start...end])
 
-        return (position, message)
+        return (position, message, symbol)
     }
 
     func parseMicE(withDestination destination: String, withInfoType infoType: String, withInfo info: String) throws -> Dictionary<String, Any> {
