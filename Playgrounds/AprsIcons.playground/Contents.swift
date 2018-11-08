@@ -20,10 +20,17 @@ enum AprsIconError: Error {
 
 public class AprsIcon {
     let primaryTableImage: NSImage
+    let altTableImage: NSImage
 
     init?() {
         if let image = NSImage(named: "aprs-symbols-24-0.png") {
             primaryTableImage = image
+        } else {
+            return nil
+        }
+
+        if let altImage = NSImage(named: "aprs-symbols-24-1.png") {
+            altTableImage = altImage
         } else {
             return nil
         }
@@ -36,6 +43,8 @@ public class AprsIcon {
         switch symbol.first {
         case "/":
             useTableImage = primaryTableImage
+        case "\\":
+            useTableImage = altTableImage
         default:
             throw AprsIconError.invalidSymbol
         }
@@ -93,7 +102,7 @@ class View: NSView {
 
         let aprsIcon = AprsIcon()
         do {
-            let iconImage = try aprsIcon?.getImage("/j")
+            let iconImage = try aprsIcon?.getImage("/v")
             layer?.contents = iconImage
         } catch {
             fatalError("can't get icon image")
@@ -104,5 +113,5 @@ class View: NSView {
 
 }
 
-let view: View = View(frame:NSRect(x: 0, y: 0, width: 240, height: 240))
+let view: View = View(frame:NSRect(x: 0, y: 0, width: 24, height: 24))
 PlaygroundPage.current.liveView = view
