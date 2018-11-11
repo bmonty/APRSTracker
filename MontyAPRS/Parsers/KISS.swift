@@ -19,6 +19,11 @@ struct KISSData: APRSData {
     }
 }
 
+enum KISSTags: Int {
+    case START
+    case FRAME
+}
+
 class KISS: NSObject, APRSParser {
 
     // MARK: - Constants
@@ -26,26 +31,23 @@ class KISS: NSObject, APRSParser {
     let FESC: UInt8 = 0xDB
     let TFEND: UInt8 = 0xDC
     let TFESC: UInt8 = 0xDD
-    private let TAG_KISS_START = 1
-    private let TAG_KISS_FRAME = 2
 
     // MARK: - Properties
     let hostname: String
     let port: UInt16
     var isConnected: Bool = false
     var delegate: InputDelegate?
-    private var socket: GCDAsyncSocket
+    private var socket: GCDAsyncSocket!
     
     // MARK:  - Methods
     init(hostname: String, port: UInt16) {
         self.hostname = hostname
         self.port = port
-        socket = GCDAsyncSocket()
-        
+
         super.init()
-        
-        socket.delegate = self
-        socket.delegateQueue = DispatchQueue.main
+
+        // initialize socket to run on global queue with QoS utility
+        socket = GCDAsyncSocket.init(delegate: self, delegateQueue: DispatchQueue.global(qos: .utility))
     }
 
     func start() -> Bool {
@@ -74,7 +76,7 @@ extension KISS: GCDAsyncSocketDelegate {
         isConnected = true
         
         // start reading for KISS frames
-        socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: TAG_KISS_START)
+        socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: KISSTags.START.rawValue)
     }
     
     // called when GCDAsyncSocket disconnects
@@ -85,13 +87,13 @@ extension KISS: GCDAsyncSocketDelegate {
     
     // called when a FEND is read
     func socket(_ sock: GCDAsyncSocket, didRead data: Data, withTag tag: Int) {
-        if tag == TAG_KISS_START {
+        if tag == KISSTags.START.rawValue {
             // recieved start of KISS frame, continue to read until next FEND
-            socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: TAG_KISS_FRAME)
+            socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: KISSTags.FRAME.rawValue)
             return
         }
         
-        if tag == TAG_KISS_FRAME {
+        if tag == KISSTags.FRAME.rawValue {
             var frame: Data
             
             // check this is a data frame
@@ -107,21 +109,20 @@ extension KISS: GCDAsyncSocketDelegate {
             
             // look for FESC and replace with appropriate value
             var position = frame.startIndex
-            while position <= frame.endIndex {
-                let bounds = frame.range(of: Data(bytes: [FESC]), in: position..<frame.endIndex)
-                if bounds != nil {
-                    switch frame[bounds!.upperBound] {
-                    case TFEND:
-                        frame.replaceSubrange(bounds!.lowerBound...bounds!.upperBound, with: Data(bytes: [FEND]))
-                    case TFESC:
-                        frame.replaceSubrange(bounds!.lowerBound...bounds!.upperBound, with: Data(bytes: [FESC]))
-                    default:
-                        break
-                    }
-                    position += bounds!.upperBound as Int
-                } else {
+            while position < frame.endIndex {
+                guard let bounds = frame.range(of: Data(bytes: [FESC]), in: position..<frame.endIndex) else {
                     break
                 }
+
+                switch frame[bounds.upperBound] {
+                case TFEND:
+                    frame.replaceSubrange(bounds.lowerBound...bounds.upperBound, with: Data(bytes: [FEND]))
+                case TFESC:
+                    frame.replaceSubrange(bounds.lowerBound...bounds.upperBound, with: Data(bytes: [FESC]))
+                default:
+                    break
+                }
+                position += bounds.upperBound
             }
             
             // send received frame up the stack
@@ -129,7 +130,7 @@ extension KISS: GCDAsyncSocketDelegate {
             delegate?.receivedData(data: kissData)
             
             // start read for the next frame
-            socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: TAG_KISS_START)
+            socket.readData(to: Data(bytes: [FEND]), withTimeout: -1, tag: KISSTags.START.rawValue)
         }
     }
     
