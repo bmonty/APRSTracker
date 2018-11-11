@@ -26,7 +26,7 @@ class APRSBeaconTests: XCTestCase {
 
     }
 
-    class APRSPlotterMock: APRSPlotter {
+    class APRSPlotterMock: AprsBeaconHandler {
 
         var didReceiveBeaconClosure: ((APRSBeaconInfo) -> Void)?
 
