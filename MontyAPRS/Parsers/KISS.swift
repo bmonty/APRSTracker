@@ -24,7 +24,7 @@ enum KISSTags: Int {
     case FRAME
 }
 
-class KISS: NSObject, APRSParser {
+class KISS: NSObject {
 
     // MARK: - Constants
     let FEND: UInt8 = 0xC0
@@ -36,7 +36,7 @@ class KISS: NSObject, APRSParser {
     let hostname: String
     let port: UInt16
     var isConnected: Bool = false
-    var delegate: InputDelegate?
+    var delegate: APRSParser?
     private var socket: GCDAsyncSocket!
     
     // MARK:  - Methods
@@ -53,12 +53,11 @@ class KISS: NSObject, APRSParser {
     func start() -> Bool {
         do {
             try socket.connect(toHost: hostname, onPort: port)
+            return true
         } catch let e {
             print(e)
             return false
         }
-        
-        return true
     }
     
     func stop() {
@@ -72,7 +71,6 @@ extension KISS: GCDAsyncSocketDelegate {
     
     // called when GCDAsyncSocket connects
     func socket(_ sock: GCDAsyncSocket, didConnectToHost host: String, port: UInt16) {
-        delegate?.didConnect()
         isConnected = true
         
         // start reading for KISS frames
@@ -81,7 +79,6 @@ extension KISS: GCDAsyncSocketDelegate {
     
     // called when GCDAsyncSocket disconnects
     func socketDidDisconnect(_ sock: GCDAsyncSocket, withError err: Error?) {
-        delegate?.didDisconnect()
         isConnected = false
     }
     
@@ -134,4 +131,12 @@ extension KISS: GCDAsyncSocketDelegate {
         }
     }
     
+}
+
+extension KISS: APRSParser {
+
+    func receivedData<T>(data: T) where T : APRSData {
+        return
+    }
+
 }

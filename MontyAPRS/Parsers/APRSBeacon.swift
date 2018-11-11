@@ -88,26 +88,10 @@ enum APRSBeaconParseError: Error {
     case invalidDataCast
 }
 
-class APRSBeacon: APRSParser {
+class APRSBeacon {
 
-    var input: APRSParser
-    var isRunning: Bool = false
-    var delegate: InputDelegate?
-    var plotter: AprsBeaconHandler?
-    
-    init(withInput input: APRSParser) {
-        self.input = input
-        self.input.delegate = self
-    }
-    
-    func start() -> Bool {
-        return input.start()
-    }
-    
-    func stop() {
-        input.stop()
-    }
-    
+    var delegate: APRSParser?
+
     private func parse(frame: AX25Frame) {
         var aprsResult: APRSBeaconInfo
 
@@ -176,9 +160,6 @@ class APRSBeacon: APRSParser {
             return
         }
 
-        // send the parsed beacon to the beacon store
-        AprsBeaconStore.shared.receiveBeacon(beacon: aprsResult)
-        
         let aprsBeaconData = APRSBeaconData(data: aprsResult)
         delegate?.receivedData(data: aprsBeaconData)
     }
@@ -339,7 +320,7 @@ class APRSBeacon: APRSParser {
         return (position, message, symbol)
     }
 
-    func parseCompressedPositionAndMessage(_ info: String) throws -> (CLLocationCoordinate2D, String, String) {
+    private func parseCompressedPositionAndMessage(_ info: String) throws -> (CLLocationCoordinate2D, String, String) {
         let symbolTable = String(info[info.startIndex])
 
         // decode latitude
@@ -380,7 +361,7 @@ class APRSBeacon: APRSParser {
         return (position, message, symbol)
     }
 
-    func parseMicE(withDestination destination: String, withInfoType infoType: String, withInfo info: String) throws -> Dictionary<String, Any> {
+    private func parseMicE(withDestination destination: String, withInfoType infoType: String, withInfo info: String) throws -> Dictionary<String, Any> {
         var data: [String: Any] = [:]
 
         // decode latitude
@@ -497,18 +478,8 @@ class APRSBeacon: APRSParser {
     }
 }
 
-extension APRSBeacon: InputDelegate {
-    
-    func didConnect() {
-        isRunning = true
-        delegate?.didConnect()
-    }
-    
-    func didDisconnect() {
-        isRunning = false
-        delegate?.didDisconnect()
-    }
-    
+extension APRSBeacon: APRSParser {
+
     func receivedData<T>(data: T) where T : APRSData {
         if let inputData = data.data as? AX25Frame {
             parse(frame: inputData)

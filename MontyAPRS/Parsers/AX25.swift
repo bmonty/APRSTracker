@@ -26,7 +26,7 @@ struct AX25Frame {
     let information: String
 }
 
-class AX25: APRSParser {
+class AX25 {
 
     // MARK: - Constants
     let ax25MinAddresses: Int = 2
@@ -51,25 +51,10 @@ class AX25: APRSParser {
     let ssidLastMask: UInt8 = 0x01
     
     // MARK: - Properties
-    var input: APRSParser
-    var delegate: InputDelegate?
-    var isRunning: Bool = false
- 
-    // MARK: - Methods
-    init(withInput input: APRSParser) {
-        self.input = input
-        self.input.delegate = self
-    }
+    var delegate: APRSParser?
 
-    func start() -> Bool {
-        return input.start()
-    }
-    
-    func stop() {
-        input.stop()
-    }
-    
-    func parse(frame: Data) {
+    // MARK: - Methods
+    private func parse(frame: Data) {
         let frameSize = frame.distance(from: frame.startIndex, to: frame.endIndex)
         if frameSize < ax25MinPacketLen || frameSize > ax25MaxPacketLen {
             print("AX25 frame is not within allowable range of \(ax25MinPacketLen) to \(ax25MaxPacketLen).")
@@ -163,22 +148,13 @@ class AX25: APRSParser {
 }
 
 // MARK: - Extensions
-extension AX25: InputDelegate {
-    
-    func didConnect() {
-        isRunning = true
-        delegate?.didConnect()
-    }
-    
-    func didDisconnect() {
-        isRunning = false
-        delegate?.didDisconnect()
-    }
+extension AX25: APRSParser {
 
     func receivedData<T: APRSData>(data: T) {
-        if let inputData = data.data as? Data {
-            parse(frame: inputData)
+        guard let inputData = data.data as? Data else {
+            return
         }
+        parse(frame: inputData)
     }
     
 }

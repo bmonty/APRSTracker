@@ -9,8 +9,7 @@
 import Foundation
 
 protocol APRSParser {
-//    associatedtype APRSParserDelegate
-    var delegate: InputDelegate? { get set }
-    func start() -> Bool
-    func stop()
+
+    func receivedData<T: APRSData>(data: T)
+
 }

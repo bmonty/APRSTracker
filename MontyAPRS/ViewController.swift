@@ -12,10 +12,9 @@ import MapKit
 class ViewController: NSViewController {
     
     // MARK: - Outlets
-    @IBOutlet var textView: NSTextView!
-    @IBOutlet weak var connectButton: NSButton!
+    @IBOutlet weak var textView: NSTextView!
     @IBOutlet weak var map: MKMapView!
-    
+
     // MARK: - Member Variables
     private let locationManager = CLLocationManager()
     private var currentCoordinate: CLLocationCoordinate2D?
@@ -50,15 +49,16 @@ class ViewController: NSViewController {
         guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else {
             return
         }
+        guard let connectButton = sender as? NSButton else {
+            return
+        }
 
         if connectButton.title == "Connect" {
-            if appDelegate.toggleProtocolStack() {
-                connectButton.title = "Disconnect"
-            }
+            appDelegate.aprsManager.start()
+            connectButton.title = "Disconnect"
         } else {
-            if appDelegate.toggleProtocolStack() {
-                connectButton.title = "Connect"
-            }
+            appDelegate.aprsManager.stop()
+            connectButton.title = "Connect"
         }
     }
 
