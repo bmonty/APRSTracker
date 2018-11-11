@@ -11,7 +11,8 @@
 		E00FED71218E7ED500EF2FEE /* AprsIcons.swift in Sources */ = {isa = PBXBuildFile; fileRef = E00FED70218E7ED500EF2FEE /* AprsIcons.swift */; };
 		E01C7344216D88F90000E137 /* AX25.swift in Sources */ = {isa = PBXBuildFile; fileRef = E01C7343216D88F90000E137 /* AX25.swift */; };
 		E02674032156A5BE006310FC /* CocoaAsyncSocket.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E02674022156A5BE006310FC /* CocoaAsyncSocket.framework */; };
-		E03C8A55216087C70072016B /* APRSPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C8A54216087C70072016B /* APRSPlotter.swift */; };
+		E03C8A55216087C70072016B /* AprsBeaconHandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = E03C8A54216087C70072016B /* AprsBeaconHandler.swift */; };
+		E057EB62218FD3A7008399F0 /* AprsBeaconStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = E057EB61218FD3A7008399F0 /* AprsBeaconStore.swift */; };
 		E098578D2185261A005DA024 /* Preferences.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E098578C2185261A005DA024 /* Preferences.storyboard */; };
 		E098578F21853AFD005DA024 /* PreferencesViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E098578E21853AFD005DA024 /* PreferencesViewController.swift */; };
 		E099AB06215B23A0009166E1 /* APRSBeacon.swift in Sources */ = {isa = PBXBuildFile; fileRef = E099AB05215B23A0009166E1 /* APRSBeacon.swift */; };
@@ -24,6 +25,8 @@
 		E0B9AF41215454BF00D7CEBE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0B9AF40215454BF00D7CEBE /* Assets.xcassets */; };
 		E0B9AF44215454BF00D7CEBE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0B9AF42215454BF00D7CEBE /* Main.storyboard */; };
 		E0E9C93D216189DC0010E1A5 /* APRSBeaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E9C93B216189C10010E1A5 /* APRSBeaconTests.swift */; };
+		E0F06FA6219452420037F011 /* AprsBeaconStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F06FA5219452420037F011 /* AprsBeaconStoreTests.swift */; };
+		E0F06FA8219459DB0037F011 /* AprsBeaconStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F06FA7219459DB0037F011 /* AprsBeaconStoreDelegate.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,7 +48,8 @@
 		E01C733F216D88900000E137 /* APRS Mic-E Parsing.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = "APRS Mic-E Parsing.playground"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		E01C7343216D88F90000E137 /* AX25.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AX25.swift; sourceTree = "<group>"; };
 		E02674022156A5BE006310FC /* CocoaAsyncSocket.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = CocoaAsyncSocket.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		E03C8A54216087C70072016B /* APRSPlotter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APRSPlotter.swift; sourceTree = "<group>"; };
+		E03C8A54216087C70072016B /* AprsBeaconHandler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AprsBeaconHandler.swift; sourceTree = "<group>"; };
+		E057EB61218FD3A7008399F0 /* AprsBeaconStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AprsBeaconStore.swift; sourceTree = "<group>"; };
 		E098578C2185261A005DA024 /* Preferences.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Preferences.storyboard; sourceTree = "<group>"; };
 		E098578E21853AFD005DA024 /* PreferencesViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PreferencesViewController.swift; sourceTree = "<group>"; };
 		E099AB05215B23A0009166E1 /* APRSBeacon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APRSBeacon.swift; sourceTree = "<group>"; };
@@ -63,6 +67,8 @@
 		E0E9C92F2161893A0010E1A5 /* MontyAPRSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MontyAPRSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0E9C9332161893A0010E1A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0E9C93B216189C10010E1A5 /* APRSBeaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APRSBeaconTests.swift; sourceTree = "<group>"; };
+		E0F06FA5219452420037F011 /* AprsBeaconStoreTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AprsBeaconStoreTests.swift; sourceTree = "<group>"; };
+		E0F06FA7219459DB0037F011 /* AprsBeaconStoreDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AprsBeaconStoreDelegate.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -128,7 +134,8 @@
 				E099AB0C215FEEF4009166E1 /* InputDelegate.swift */,
 				E099AB0F215FF10D009166E1 /* APRSData.swift */,
 				E099AB11215FFBA5009166E1 /* APRSParser.swift */,
-				E03C8A54216087C70072016B /* APRSPlotter.swift */,
+				E03C8A54216087C70072016B /* AprsBeaconHandler.swift */,
+				E0F06FA7219459DB0037F011 /* AprsBeaconStoreDelegate.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -173,6 +180,7 @@
 				E0B9AF40215454BF00D7CEBE /* Assets.xcassets */,
 				E0B9AF3C215454BD00D7CEBE /* AppDelegate.swift */,
 				E0B9AF3E215454BD00D7CEBE /* ViewController.swift */,
+				E057EB61218FD3A7008399F0 /* AprsBeaconStore.swift */,
 				E098578E21853AFD005DA024 /* PreferencesViewController.swift */,
 				E00FED70218E7ED500EF2FEE /* AprsIcons.swift */,
 				E098578B218525DE005DA024 /* Storyboards */,
@@ -185,8 +193,9 @@
 		E0E9C9302161893A0010E1A5 /* MontyAPRSTests */ = {
 			isa = PBXGroup;
 			children = (
-				E0E9C93B216189C10010E1A5 /* APRSBeaconTests.swift */,
 				E0E9C9332161893A0010E1A5 /* Info.plist */,
+				E0E9C93B216189C10010E1A5 /* APRSBeaconTests.swift */,
+				E0F06FA5219452420037F011 /* AprsBeaconStoreTests.swift */,
 			);
 			path = MontyAPRSTests;
 			sourceTree = "<group>";
@@ -333,14 +342,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E03C8A55216087C70072016B /* APRSPlotter.swift in Sources */,
+				E03C8A55216087C70072016B /* AprsBeaconHandler.swift in Sources */,
 				E0B9AF3F215454BD00D7CEBE /* ViewController.swift in Sources */,
 				E099AB10215FF10D009166E1 /* APRSData.swift in Sources */,
 				E0B9AF3D215454BD00D7CEBE /* AppDelegate.swift in Sources */,
+				E0F06FA8219459DB0037F011 /* AprsBeaconStoreDelegate.swift in Sources */,
 				E01C7344216D88F90000E137 /* AX25.swift in Sources */,
 				E098578F21853AFD005DA024 /* PreferencesViewController.swift in Sources */,
 				E099AB06215B23A0009166E1 /* APRSBeacon.swift in Sources */,
 				E099AB0D215FEEF4009166E1 /* InputDelegate.swift in Sources */,
+				E057EB62218FD3A7008399F0 /* AprsBeaconStore.swift in Sources */,
 				E0A0B4F921568FBD00DAB7BC /* KISS.swift in Sources */,
 				E00FED71218E7ED500EF2FEE /* AprsIcons.swift in Sources */,
 				E099AB12215FFBA5009166E1 /* APRSParser.swift in Sources */,
@@ -351,6 +362,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E0F06FA6219452420037F011 /* AprsBeaconStoreTests.swift in Sources */,
 				E0E9C93D216189DC0010E1A5 /* APRSBeaconTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
