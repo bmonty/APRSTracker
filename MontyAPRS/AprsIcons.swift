@@ -26,10 +26,17 @@ enum AprsIconError: Error {
 
 public class AprsIcon {
     let primaryTableImage: NSImage
+    let alternateTableImage: NSImage
 
     init?() {
-        if let image = NSImage(named: "primary-aprs-icons") {
-            primaryTableImage = image
+        if let priImage = NSImage(named: "primary-aprs-icons") {
+            primaryTableImage = priImage
+        } else {
+            return nil
+        }
+
+        if let altImage = NSImage(named: "alternate-aprs-icons") {
+            alternateTableImage = altImage
         } else {
             return nil
         }
@@ -42,6 +49,8 @@ public class AprsIcon {
         switch symbol.first {
         case "/":
             useTableImage = primaryTableImage
+        case "\\":
+            useTableImage = alternateTableImage
         default:
             throw AprsIconError.invalidSymbol
         }
