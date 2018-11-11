@@ -93,7 +93,7 @@ class APRSBeacon: APRSParser {
     var input: APRSParser
     var isRunning: Bool = false
     var delegate: InputDelegate?
-    var plotter: APRSPlotter?
+    var plotter: AprsBeaconHandler?
     
     init(withInput input: APRSParser) {
         self.input = input
@@ -176,8 +176,8 @@ class APRSBeacon: APRSParser {
             return
         }
 
-        // send the parsed beacon to a plotter
-        plotter?.receiveBeacon(beacon: aprsResult)
+        // send the parsed beacon to the beacon store
+        AprsBeaconStore.shared.receiveBeacon(beacon: aprsResult)
         
         let aprsBeaconData = APRSBeaconData(data: aprsResult)
         delegate?.receivedData(data: aprsBeaconData)
