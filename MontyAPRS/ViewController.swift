@@ -17,8 +17,6 @@ class ViewController: NSViewController {
     @IBOutlet weak var map: MKMapView!
     
     // MARK: - Member Variables
-    var isProtocolStackRunning: Bool = false
-    var protocolStack: [APRSParser] = []
     private let locationManager = CLLocationManager()
     private var currentCoordinate: CLLocationCoordinate2D?
     
@@ -28,16 +26,6 @@ class ViewController: NSViewController {
         
         // setup location for map
         configureLocationServices()
-        
-        // setup APRS protocol stack
-        // the setup of the stack could eventually be configurable...
-        let kiss = KISS(hostname: "aprs.montynet.org", port: 8001)
-        protocolStack.append(kiss)
-        let ax25 = AX25(withInput: kiss)
-        protocolStack.append(ax25)
-        let aprsBeacon = APRSBeacon(withInput: ax25)
-        protocolStack.append(aprsBeacon)
-        aprsBeacon.plotter = self
     }
 
     private func configureLocationServices() {
@@ -59,16 +47,17 @@ class ViewController: NSViewController {
     }
     
     @IBAction func connectAction(_ sender: Any) {
-        if isProtocolStackRunning {
-            guard let proto = protocolStack.last else { return }
-            proto.stop()
-            connectButton.title = "Connect"
-            isProtocolStackRunning = false
-        } else {
-            guard let proto = protocolStack.last else { return }
-            if proto.start() {
+        guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else {
+            return
+        }
+
+        if connectButton.title == "Connect" {
+            if appDelegate.toggleProtocolStack() {
                 connectButton.title = "Disconnect"
-                isProtocolStackRunning = true
+            }
+        } else {
+            if appDelegate.toggleProtocolStack() {
+                connectButton.title = "Connect"
             }
         }
     }
@@ -100,34 +89,43 @@ extension ViewController: CLLocationManagerDelegate {
     
 }
 
-extension ViewController: APRSPlotter {
-    func receiveBeacon(beacon: APRSBeaconInfo) {
-        let aprsAnnotation = MKPointAnnotation()
-        aprsAnnotation.title = beacon.station
-        if beacon.message != nil {
-            aprsAnnotation.subtitle = beacon.message
-        }
-        aprsAnnotation.coordinate = beacon.position
-        map.addAnnotation(aprsAnnotation)
-        
-        var beaconText = String("\(beacon.station)>\(beacon.destination),")
-        if beacon.digipeaters != nil {
-            let digipeaters = beacon.digipeaters!
-            var numDigipeaters = digipeaters.count
-            for digipeater in digipeaters {
-                beaconText.append(digipeater)
-                if numDigipeaters < digipeaters.count {
-                    beaconText.append(",")
-                }
-                numDigipeaters += 1
-            }
-        }
-        
-        if beacon.message != nil {
-            let message = beacon.message!
-            beaconText.append(":\(message)")
-        }
-        
-        appendToTextField(string: beaconText)
+extension ViewController: AprsBeaconStoreDelegate {
+
+    func beaconsDidUpdate(withStation station: String) {
+//        guard let stationInfo = AprsBeaconStore.shared.beacons[station] else {
+//            return
+//        }
+//        guard let beacon = stationInfo.last else {
+//            return
+//        }
+//
+//        let aprsAnnotation = MKPointAnnotation()
+//        aprsAnnotation.title = station
+//        if beacon.message != nil {
+//            aprsAnnotation.subtitle = beacon.message
+//        }
+//        aprsAnnotation.coordinate = beacon.position
+//        map.addAnnotation(aprsAnnotation)
+//
+//        var beaconText = String("\(beacon.station)>\(beacon.destination),")
+//        if beacon.digipeaters != nil {
+//            let digipeaters = beacon.digipeaters!
+//            var numDigipeaters = digipeaters.count
+//            for digipeater in digipeaters {
+//                beaconText.append(digipeater)
+//                if numDigipeaters < digipeaters.count {
+//                    beaconText.append(",")
+//                }
+//                numDigipeaters += 1
+//            }
+//        }
+//
+//        if beacon.message != nil {
+//            let message = beacon.message!
+//            beaconText.append(":\(message)")
+//        }
+
+        appendToTextField(string: station)
     }
+
 }
