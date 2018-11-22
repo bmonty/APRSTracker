@@ -10,29 +10,34 @@ import Foundation
 
 class AprsBeaconStore {
 
-    // MARK: - Properties
+    // MARK: - Static Properties
     static let shared = AprsBeaconStore()
 
-    // MARK: -
+    // MARK: - Properties
     var beacons: [String: [APRSBeaconInfo]]
-    private let concurrentBeaconQueue = DispatchQueue(label: "org.montynet.MontyAPRS.beaconQueue",
-                                                      attributes: .concurrent)
-    var delegate: AprsBeaconStoreDelegate?
-
-    private init() {
-        beacons = [:]
-    }
-
     var count: Int {
         get {
             return beacons.count
         }
     }
+    private let concurrentBeaconQueue = DispatchQueue(label: "org.montynet.MontyAPRS.beaconQueue",
+                                                      attributes: .concurrent)
 
-    func postBeaconUpdateNotification(_ station: String) {
-        delegate?.beaconsDidUpdate(withStation: station)
+    // MARK: -
+    private init() {
+        beacons = [:]
     }
 
+    func postBeaconUpdateNotification(_ station: String) {
+        let infoDict: [String: String] = ["station": station]
+        NotificationCenter.default.post(name: .didReceiveBeacon, object: nil, userInfo: infoDict)
+    }
+
+}
+
+// MARK: - Notification.Name
+extension Notification.Name {
+    static let didReceiveBeacon = Notification.Name(rawValue: "org.montynet.didReceiveData")
 }
 
 // MARK: - AprsBeaconHandler
@@ -48,6 +53,7 @@ extension AprsBeaconStore: AprsBeaconHandler {
 
 }
 
+// MARK: - AprsBeaconStore
 private extension AprsBeaconStore {
 
     func addNewStation(_ beacon: APRSBeaconInfo) {
@@ -60,7 +66,7 @@ private extension AprsBeaconStore {
             beaconArray.append(beacon)
             self.beacons[beacon.station] = beaconArray
 
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.global(qos: .background).async { [weak self] in
                 self?.postBeaconUpdateNotification(beacon.station)
             }
         }
@@ -79,7 +85,7 @@ private extension AprsBeaconStore {
 
             self.beacons.updateValue(beaconArray, forKey: beacon.station)
 
-            DispatchQueue.main.async { [weak self] in
+            DispatchQueue.global(qos: .background).async { [weak self] in
                 self?.postBeaconUpdateNotification(beacon.station)
             }
         }

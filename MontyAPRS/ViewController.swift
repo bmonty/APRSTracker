@@ -11,11 +11,12 @@ import MapKit
 
 class ViewController: NSViewController {
     
-    // MARK: - Outlets
-    @IBOutlet weak var textView: NSTextView!
+    // MARK: - Reference Outlets
     @IBOutlet weak var map: MKMapView!
-
+    @IBOutlet weak var mainSplitView: NSSplitView!
+    
     // MARK: - Member Variables
+    let plotter = AprsPlotter()
     private let locationManager = CLLocationManager()
     private var currentCoordinate: CLLocationCoordinate2D?
     
@@ -25,8 +26,22 @@ class ViewController: NSViewController {
         
         // setup location for map
         configureLocationServices()
+
+        // register aprs beacon annotation view
+        map.register(BeaconAnnotationView.self, forAnnotationViewWithReuseIdentifier: MKMapViewDefaultAnnotationViewReuseIdentifier)
+
+        // connect the plotter
+        plotter.mapView = map
+        map.delegate = plotter
     }
 
+    override func viewDidAppear() {
+        super.viewDidAppear()
+
+        let maxPos = mainSplitView.maxPossiblePositionOfDivider(at: 0)
+        mainSplitView.setPosition(maxPos, ofDividerAt: 0)
+    }
+    
     private func configureLocationServices() {
         if CLLocationManager.locationServicesEnabled() {
             locationManager.delegate = self
@@ -44,27 +59,19 @@ class ViewController: NSViewController {
         let zoomRegion = MKCoordinateRegion(center: coordinate, latitudinalMeters: 50000, longitudinalMeters: 50000)
         map.setRegion(zoomRegion, animated: true)
     }
-    
-    @IBAction func connectAction(_ sender: Any) {
+
+    @IBAction func aprsConnect(_ menuItem: NSMenuItem) {
         guard let appDelegate = NSApplication.shared.delegate as? AppDelegate else {
             return
         }
-        guard let connectButton = sender as? NSButton else {
-            return
-        }
 
-        if connectButton.title == "Connect" {
+        if menuItem.state == NSControl.StateValue.off {
             appDelegate.aprsManager.start()
-            connectButton.title = "Disconnect"
+            menuItem.state = NSControl.StateValue.on
         } else {
             appDelegate.aprsManager.stop()
-            connectButton.title = "Connect"
+            menuItem.state = NSControl.StateValue.off
         }
-    }
-
-    private func appendToTextField(string: String) {
-        textView.textStorage?.append(NSAttributedString(string: "\(string)\n"))
-        textView.scrollToEndOfDocument(textView)
     }
 
 }
@@ -87,45 +94,4 @@ extension ViewController: CLLocationManagerDelegate {
         }
     }
     
-}
-
-extension ViewController: AprsBeaconStoreDelegate {
-
-    func beaconsDidUpdate(withStation station: String) {
-//        guard let stationInfo = AprsBeaconStore.shared.beacons[station] else {
-//            return
-//        }
-//        guard let beacon = stationInfo.last else {
-//            return
-//        }
-//
-//        let aprsAnnotation = MKPointAnnotation()
-//        aprsAnnotation.title = station
-//        if beacon.message != nil {
-//            aprsAnnotation.subtitle = beacon.message
-//        }
-//        aprsAnnotation.coordinate = beacon.position
-//        map.addAnnotation(aprsAnnotation)
-//
-//        var beaconText = String("\(beacon.station)>\(beacon.destination),")
-//        if beacon.digipeaters != nil {
-//            let digipeaters = beacon.digipeaters!
-//            var numDigipeaters = digipeaters.count
-//            for digipeater in digipeaters {
-//                beaconText.append(digipeater)
-//                if numDigipeaters < digipeaters.count {
-//                    beaconText.append(",")
-//                }
-//                numDigipeaters += 1
-//            }
-//        }
-//
-//        if beacon.message != nil {
-//            let message = beacon.message!
-//            beaconText.append(":\(message)")
-//        }
-
-        appendToTextField(string: station)
-    }
-
 }

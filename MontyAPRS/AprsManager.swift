@@ -12,22 +12,21 @@ import Cocoa
 class AprsManager {
 
     let kiss: KISS
-    let ax25: AX25
-    let aprsBeacon: APRSBeacon
+    let ax25 = AX25()
+    let aprsBeacon = APRSBeacon()
 
     init() {
         // setup APRS protocol stack
         kiss = KISS(hostname: "aprs.montynet.org", port: 8001)
-        ax25 = AX25()
-        aprsBeacon = APRSBeacon()
 
         // connect delegates
         kiss.delegate = ax25
         ax25.delegate = aprsBeacon
+        aprsBeacon.delegate = self
     }
 
     func start() {
-        if !kiss.start() {
+        if !self.kiss.start() {
             let alert = NSAlert()
             alert.messageText = "Unable to connect to TNC."
             alert.alertStyle = .warning
