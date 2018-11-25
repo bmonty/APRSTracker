@@ -54,7 +54,7 @@ class AprsBeaconStoreTests: XCTestCase {
         consumer.didReceiveBeaconUpdateClosure = { station in
             XCTAssertEqual(beaconStore.beacons.count, 1)
             XCTAssertNotNil(beaconStore.beacons[station])
-            XCTAssertEqual(beaconStore.count, 1)
+            XCTAssertEqual(beaconStore.stationCount, 1)
 
             plotterExpectation.fulfill()
         }
@@ -76,7 +76,7 @@ class AprsBeaconStoreTests: XCTestCase {
         consumer.didReceiveBeaconUpdateClosure = { station in
             XCTAssertEqual(beaconStore.beacons.count, 1)
             XCTAssertNotNil(beaconStore.beacons[station])
-            XCTAssertEqual(beaconStore.count, 1)
+            XCTAssertEqual(beaconStore.stationCount, 1)
 
             plotterExpectation.fulfill()
         }
@@ -106,6 +106,6 @@ class AprsBeaconStoreTests: XCTestCase {
         beaconStore.receiveBeacon(beacon: testBeacon3)
         waitForExpectations(timeout: 1.0)
 
-        XCTAssertEqual(beaconStore.count, 2)
+        XCTAssertEqual(beaconStore.stationCount, 2)
     }
 }

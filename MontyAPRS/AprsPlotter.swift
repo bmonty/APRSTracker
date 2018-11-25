@@ -33,7 +33,7 @@ class AprsPlotter: NSObject {
                 return
             }
 
-            guard let beacon = getBeacons(forStation: station)?.last else {
+            guard let beacon = AprsBeaconStore.shared.getBeacons(forStation: station)?.last else {
                 return
             }
 
@@ -55,13 +55,6 @@ class AprsPlotter: NSObject {
                 self.mapView?.addAnnotation(newAnnotation)
             }
         }
-    }
-
-    private func getBeacons(forStation station: String) -> [APRSBeaconInfo]? {
-        guard let beacons: [APRSBeaconInfo] = AprsBeaconStore.shared.beacons[station] else {
-            return nil
-        }
-        return beacons
     }
 
     //    func checkPositions(oldPosition: CLLocationCoordinate2D, newPosition: CLLocationCoordinate2D) {

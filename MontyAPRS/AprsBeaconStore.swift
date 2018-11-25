@@ -8,55 +8,55 @@
 
 import Foundation
 
+/**
+ * Singleton class to store all beacons recieved by the app.
+ */
 class AprsBeaconStore {
 
     // MARK: - Static Properties
+    /// Singleton for access to `AprsBeaconStore` data.
     static let shared = AprsBeaconStore()
 
     // MARK: - Properties
+
+    /// Dictionary of beacons with the station as the key.
     var beacons: [String: [APRSBeaconInfo]]
-    var count: Int {
+
+    /// Returns the count of stations received.
+    var stationCount: Int {
         get {
             return beacons.count
         }
     }
+
+    // `DispatchQueue` used to control updates to `beacons`.
     private let concurrentBeaconQueue = DispatchQueue(label: "org.montynet.MontyAPRS.beaconQueue",
                                                       attributes: .concurrent)
 
-    // MARK: -
+    /**
+     This is a singleton class.  Use `AprsBeaconStore.shared`.
+     */
     private init() {
         beacons = [:]
     }
 
-    func postBeaconUpdateNotification(_ station: String) {
-        let infoDict: [String: String] = ["station": station]
-        NotificationCenter.default.post(name: .didReceiveBeacon, object: nil, userInfo: infoDict)
-    }
+    /**
+     Get the `APRSBeaconInfo` array for a station.
 
-}
+     - Parameters:
+        - forStation: get beacons for this station callsign
 
-// MARK: - Notification.Name
-extension Notification.Name {
-    static let didReceiveBeacon = Notification.Name(rawValue: "org.montynet.didReceiveData")
-}
-
-// MARK: - AprsBeaconHandler
-extension AprsBeaconStore: AprsBeaconHandler {
-
-    func receiveBeacon(beacon: APRSBeaconInfo) {
-        if let _ = beacons[beacon.station] {
-            updateStation(beacon)
-        } else {
-            addNewStation(beacon)
+     - Returns: The `APRSBeaconInfo` array for the station or `nil` if the
+                station hasn't been heard.
+     */
+    func getBeacons(forStation station: String) -> [APRSBeaconInfo]? {
+        guard let beacons: [APRSBeaconInfo] = AprsBeaconStore.shared.beacons[station] else {
+            return nil
         }
+        return beacons
     }
 
-}
-
-// MARK: - AprsBeaconStore
-private extension AprsBeaconStore {
-
-    func addNewStation(_ beacon: APRSBeaconInfo) {
+    private func addNewStation(_ beacon: APRSBeaconInfo) {
         concurrentBeaconQueue.async(flags: .barrier) { [weak self] in
             guard let self = self else {
                 return
@@ -72,7 +72,7 @@ private extension AprsBeaconStore {
         }
     }
 
-    func updateStation(_ beacon: APRSBeaconInfo) {
+    private func updateStation(_ beacon: APRSBeaconInfo) {
         concurrentBeaconQueue.async(flags: .barrier) { [weak self] in
             guard let self = self else {
                 return
@@ -88,6 +88,30 @@ private extension AprsBeaconStore {
             DispatchQueue.global(qos: .background).async { [weak self] in
                 self?.postBeaconUpdateNotification(beacon.station)
             }
+        }
+    }
+
+    private func postBeaconUpdateNotification(_ station: String) {
+        let infoDict: [String: String] = ["station": station]
+        NotificationCenter.default.post(name: .didReceiveBeacon, object: nil, userInfo: infoDict)
+    }
+
+}
+
+// MARK: - Notification.Name
+extension Notification.Name {
+    /// Name of the notification sent when new beacons are received.
+    static let didReceiveBeacon = Notification.Name(rawValue: "org.montynet.didReceiveData")
+}
+
+// MARK: - AprsBeaconHandler
+extension AprsBeaconStore: AprsBeaconHandler {
+
+    func receiveBeacon(beacon: APRSBeaconInfo) {
+        if let _ = beacons[beacon.station] {
+            updateStation(beacon)
+        } else {
+            addNewStation(beacon)
         }
     }
 
