@@ -26,6 +26,7 @@
 		E0B9AF44215454BF00D7CEBE /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0B9AF42215454BF00D7CEBE /* Main.storyboard */; };
 		E0C4BF712198E5A9008432A6 /* AprsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C4BF702198E5A9008432A6 /* AprsManager.swift */; };
 		E0C4BF7321991984008432A6 /* AprsPlotter.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0C4BF7221991984008432A6 /* AprsPlotter.swift */; };
+		E0CCD7DF21AB12E2006A0EED /* AprsRawPacketsTextView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0CCD7DE21AB12E2006A0EED /* AprsRawPacketsTextView.swift */; };
 		E0E9C93D216189DC0010E1A5 /* APRSBeaconTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0E9C93B216189C10010E1A5 /* APRSBeaconTests.swift */; };
 		E0F06FA6219452420037F011 /* AprsBeaconStoreTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F06FA5219452420037F011 /* AprsBeaconStoreTests.swift */; };
 		E0F06FA8219459DB0037F011 /* AprsBeaconStoreDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0F06FA7219459DB0037F011 /* AprsBeaconStoreDelegate.swift */; };
@@ -68,6 +69,7 @@
 		E0B9AF46215454BF00D7CEBE /* MontyAPRS.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MontyAPRS.entitlements; sourceTree = "<group>"; };
 		E0C4BF702198E5A9008432A6 /* AprsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AprsManager.swift; sourceTree = "<group>"; };
 		E0C4BF7221991984008432A6 /* AprsPlotter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AprsPlotter.swift; sourceTree = "<group>"; };
+		E0CCD7DE21AB12E2006A0EED /* AprsRawPacketsTextView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AprsRawPacketsTextView.swift; sourceTree = "<group>"; };
 		E0E9C92F2161893A0010E1A5 /* MontyAPRSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MontyAPRSTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0E9C9332161893A0010E1A5 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		E0E9C93B216189C10010E1A5 /* APRSBeaconTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APRSBeaconTests.swift; sourceTree = "<group>"; };
@@ -136,6 +138,7 @@
 			isa = PBXGroup;
 			children = (
 				E0991EDA21A768E100443426 /* AprsSplitViewController.swift */,
+				E0CCD7DE21AB12E2006A0EED /* AprsRawPacketsTextView.swift */,
 			);
 			path = "UI Items";
 			sourceTree = "<group>";
@@ -358,6 +361,7 @@
 			files = (
 				E03C8A55216087C70072016B /* AprsBeaconHandler.swift in Sources */,
 				E0C4BF712198E5A9008432A6 /* AprsManager.swift in Sources */,
+				E0CCD7DF21AB12E2006A0EED /* AprsRawPacketsTextView.swift in Sources */,
 				E0B9AF3F215454BD00D7CEBE /* ViewController.swift in Sources */,
 				E099AB10215FF10D009166E1 /* APRSData.swift in Sources */,
 				E0B9AF3D215454BD00D7CEBE /* AppDelegate.swift in Sources */,

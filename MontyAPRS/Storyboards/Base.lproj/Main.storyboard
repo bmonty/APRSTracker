@@ -466,22 +466,22 @@
                                             <scrollView borderType="none" horizontalLineScroll="10" horizontalPageScroll="10" verticalLineScroll="10" verticalPageScroll="10" hasHorizontalScroller="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eIE-Fv-45y">
                                                 <rect key="frame" x="0.0" y="0.0" width="948" height="377"/>
                                                 <clipView key="contentView" drawsBackground="NO" copiesOnScroll="NO" id="t9E-Li-jPV">
-                                                    <rect key="frame" x="0.0" y="0.0" width="948" height="377"/>
+                                                    <rect key="frame" x="0.0" y="0.0" width="933" height="377"/>
                                                     <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                     <subviews>
-                                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="srQ-Oy-iqt">
-                                                            <rect key="frame" x="0.0" y="0.0" width="948" height="377"/>
+                                                        <textView importsGraphics="NO" richText="NO" verticallyResizable="YES" spellingCorrection="YES" smartInsertDelete="YES" id="srQ-Oy-iqt" customClass="AprsRawPacketsTextView" customModule="MontyAPRS" customModuleProvider="target">
+                                                            <rect key="frame" x="0.0" y="0.0" width="933" height="377"/>
                                                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                                                             <color key="textColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                             <color key="backgroundColor" name="textBackgroundColor" catalog="System" colorSpace="catalog"/>
-                                                            <size key="minSize" width="948" height="377"/>
+                                                            <size key="minSize" width="933" height="377"/>
                                                             <size key="maxSize" width="948" height="10000000"/>
                                                             <color key="insertionPointColor" name="textColor" catalog="System" colorSpace="catalog"/>
                                                         </textView>
                                                     </subviews>
                                                 </clipView>
                                                 <scroller key="verticalScroller" wantsLayer="YES" verticalHuggingPriority="750" horizontal="NO" id="NlV-Ig-0gz">
-                                                    <rect key="frame" x="932" y="0.0" width="16" height="377"/>
+                                                    <rect key="frame" x="933" y="0.0" width="15" height="377"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                 </scroller>
                                             </scrollView>
