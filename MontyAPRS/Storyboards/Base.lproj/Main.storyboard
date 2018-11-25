@@ -441,7 +441,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="988" height="786"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <subviews>
-                            <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="ZoC-rq-dFA">
+                            <splitView arrangesAllSubviews="NO" dividerStyle="paneSplitter" translatesAutoresizingMaskIntoConstraints="NO" id="ZoC-rq-dFA" customClass="AprsSplitView" customModule="MontyAPRS" customModuleProvider="target">
                                 <rect key="frame" x="20" y="20" width="948" height="746"/>
                                 <subviews>
                                     <customView id="d9a-9B-HJj">

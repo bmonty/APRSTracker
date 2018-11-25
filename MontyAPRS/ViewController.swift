@@ -13,7 +13,7 @@ class ViewController: NSViewController {
     
     // MARK: - Reference Outlets
     @IBOutlet weak var map: MKMapView!
-    @IBOutlet weak var mainSplitView: NSSplitView!
+    @IBOutlet weak var mainSplitView: AprsSplitView!
     
     // MARK: - Member Variables
     let plotter = AprsPlotter()
