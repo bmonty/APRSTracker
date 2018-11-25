@@ -50,7 +50,7 @@ struct APRSBeaconData: APRSData {
     }
 }
 
-struct APRSBeaconInfo {
+struct APRSBeaconInfo: Hashable {
     var station: String
     var destination: String
     var digipeaters: [String]?
@@ -78,6 +78,40 @@ struct APRSBeaconInfo {
         self.message = message
         self.position = position
         self.timeStamp = Date()
+    }
+
+    static func == (lhs: APRSBeaconInfo, rhs: APRSBeaconInfo) -> Bool {
+        if lhs.message == nil && rhs.message != nil {
+            return false
+        }
+
+        if lhs.message != nil && rhs.message == nil {
+            return false
+        }
+
+        if lhs.message != nil && rhs.message != nil {
+            return lhs.station == rhs.station
+                   && lhs.destination == rhs.destination
+                   && lhs.timeStamp == rhs.timeStamp
+                   && lhs.message == rhs.message
+        }
+
+        if lhs.message == nil && rhs.message == nil {
+            return lhs.station == rhs.station
+                && lhs.destination == rhs.destination
+                && lhs.timeStamp == rhs.timeStamp
+        }
+
+        return false
+    }
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(station)
+        hasher.combine(destination)
+        hasher.combine(timeStamp)
+        if message != nil {
+            hasher.combine(message)
+        }
     }
 }
 
