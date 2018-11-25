@@ -89,17 +89,19 @@ struct APRSBeaconInfo: Hashable {
             return false
         }
 
+        let beaconInterval = abs(lhs.timeStamp.timeIntervalSince(rhs.timeStamp))
+
         if lhs.message != nil && rhs.message != nil {
             return lhs.station == rhs.station
                    && lhs.destination == rhs.destination
-                   && lhs.timeStamp == rhs.timeStamp
                    && lhs.message == rhs.message
+                   && beaconInterval < 2
         }
 
         if lhs.message == nil && rhs.message == nil {
             return lhs.station == rhs.station
                 && lhs.destination == rhs.destination
-                && lhs.timeStamp == rhs.timeStamp
+                && beaconInterval < 2
         }
 
         return false
