@@ -62,6 +62,10 @@ class AprsBeaconStore {
                 return
             }
 
+            if self.isDuplicateBeacon(forBeacon: beacon) {
+                return
+            }
+
             var beaconArray = [APRSBeaconInfo]()
             beaconArray.append(beacon)
             self.beacons[beacon.station] = beaconArray
@@ -75,6 +79,10 @@ class AprsBeaconStore {
     private func updateStation(_ beacon: APRSBeaconInfo) {
         concurrentBeaconQueue.async(flags: .barrier) { [weak self] in
             guard let self = self else {
+                return
+            }
+
+            if self.isDuplicateBeacon(forBeacon: beacon) {
                 return
             }
 
@@ -94,6 +102,27 @@ class AprsBeaconStore {
     private func postBeaconUpdateNotification(_ station: String) {
         let infoDict: [String: String] = ["station": station]
         NotificationCenter.default.post(name: .didReceiveBeacon, object: nil, userInfo: infoDict)
+    }
+
+    /**
+     Checks if `beacon` is a duplicate.
+
+     - Parameters:
+        - forBeacon: the beacon to check
+
+     - Returns:
+        - `true` if the beacon is a duplicate, `false` otherwise
+     */
+    func isDuplicateBeacon(forBeacon beacon: APRSBeaconInfo) -> Bool {
+        guard let stationBeacons = beacons[beacon.station] else {
+            return false
+        }
+
+        guard let lastBeacon = stationBeacons.last else {
+            return false
+        }
+
+        return beacon == lastBeacon
     }
 
 }
