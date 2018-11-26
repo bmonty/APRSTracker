@@ -53,6 +53,7 @@ class AprsRawPacketsTextView: NSTextView {
                 let attr = NSAttributedString(string: beaconString as String,
                                               attributes: [.foregroundColor: NSColor.textColor])
                 self.textStorage?.append(attr)
+                self.scrollToEndOfDocument(self)
             }
         }
     }
