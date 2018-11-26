@@ -27,16 +27,6 @@ class AprsBeaconStoreTests: XCTestCase {
                                      message: "This is a third test.",
                                      position: CLLocationCoordinate2D(latitude: 90, longitude: -32))
 
-    class AprsPlotterDelegateMock: AprsBeaconStoreDelegate {
-
-        var didReceiveBeaconUpdateClosure: ((String) -> Void)?
-
-        func beaconsDidUpdate(withStation station: String) {
-            didReceiveBeaconUpdateClosure?(station)
-        }
-
-    }
-
     override func tearDown() {
         super.tearDown()
 
@@ -45,67 +35,116 @@ class AprsBeaconStoreTests: XCTestCase {
     }
 
     func testAddNewStation() {
-        let beaconStore = AprsBeaconStore.shared
+        let _ = expectation(forNotification: .didReceiveBeacon, object: nil, handler: { (notification) -> Bool in
+            if let userInfo = notification.userInfo as? [String: String] {
+                guard let station = userInfo["station"] else {
+                    return false
+                }
+                XCTAssertEqual(station, "KG5YOV-9")
 
-        let plotterExpectation = expectation(description: "A new beacon is added.")
-        let consumer = AprsPlotterDelegateMock()
-        beaconStore.delegate = consumer
+                guard let beacons = AprsBeaconStore.shared.getBeacons(forStation: station) else {
+                    return false
+                }
 
-        consumer.didReceiveBeaconUpdateClosure = { station in
-            XCTAssertEqual(beaconStore.beacons.count, 1)
-            XCTAssertNotNil(beaconStore.beacons[station])
-            XCTAssertEqual(beaconStore.stationCount, 1)
+                XCTAssertEqual(beacons.count, 1)
+                XCTAssertEqual(AprsBeaconStore.shared.stationCount, 1)
 
-            plotterExpectation.fulfill()
-        }
+                XCTAssertEqual(beacons[0].station, "KG5YOV-9")
+                XCTAssertEqual(beacons[0].destination, "TEST")
+                XCTAssertEqual(beacons[0].message, "This is a first test.")
 
+                return true
+            }
 
-        beaconStore.receiveBeacon(beacon: testBeacon1)
+            return false
+        })
+
+        AprsBeaconStore.shared.receiveBeacon(beacon: testBeacon1)
 
         waitForExpectations(timeout: 1.0)
     }
 
     func testUpdateStation() {
-        let beaconStore = AprsBeaconStore.shared
-        beaconStore.beacons["KG5YOV-9"] = [testBeacon1]
+        AprsBeaconStore.shared.beacons["KG5YOV-9"] = [testBeacon1]
+        let _ = expectation(forNotification: .didReceiveBeacon, object: nil, handler: { (notification) -> Bool in
+            if let userInfo = notification.userInfo as? [String: String] {
+                guard let station = userInfo["station"] else {
+                    return false
+                }
+                XCTAssertEqual(station, "KG5YOV-9")
 
-        let plotterExpectation = expectation(description: "A beacon is updated.")
-        let consumer = AprsPlotterDelegateMock()
-        beaconStore.delegate = consumer
+                guard let beacons = AprsBeaconStore.shared.getBeacons(forStation: station) else {
+                    return false
+                }
 
-        consumer.didReceiveBeaconUpdateClosure = { station in
-            XCTAssertEqual(beaconStore.beacons.count, 1)
-            XCTAssertNotNil(beaconStore.beacons[station])
-            XCTAssertEqual(beaconStore.stationCount, 1)
+                XCTAssertEqual(beacons.count, 2)
+                XCTAssertEqual(AprsBeaconStore.shared.stationCount, 1)
 
-            plotterExpectation.fulfill()
-        }
+                XCTAssertEqual(beacons[1].station, "KG5YOV-9")
+                XCTAssertEqual(beacons[1].destination, "TEST")
+                XCTAssertEqual(beacons[1].message, "This is a second test.")
 
-        beaconStore.receiveBeacon(beacon: testBeacon2)
+                return true
+            }
+
+            return false
+        })
+
+        AprsBeaconStore.shared.receiveBeacon(beacon: testBeacon2)
 
         waitForExpectations(timeout: 1.0)
     }
 
     func testAddSecondStation() {
-        let beaconStore = AprsBeaconStore.shared
+        let _ = expectation(forNotification: .didReceiveBeacon, object: nil, handler: { (notification) -> Bool in
+            if let userInfo = notification.userInfo as? [String: String] {
+                guard let station = userInfo["station"] else {
+                    return false
+                }
+                XCTAssertEqual(station, "KG5YOV-9")
 
-        var testExpectation = expectation(description: "Add first beacon.")
-        beaconStore.receiveBeacon(beacon: testBeacon1)
-        let firstBeacon = AprsPlotterDelegateMock()
-        firstBeacon.didReceiveBeaconUpdateClosure = { station in
-            testExpectation.fulfill()
-        }
-        beaconStore.delegate = firstBeacon
+                guard let beacons = AprsBeaconStore.shared.getBeacons(forStation: station) else {
+                    return false
+                }
+
+                XCTAssertEqual(beacons.count, 1)
+                XCTAssertEqual(beacons[0].station, "KG5YOV-9")
+                XCTAssertEqual(beacons[0].destination, "TEST")
+                XCTAssertEqual(beacons[0].message, "This is a first test.")
+
+                return true
+            }
+
+            return false
+        })
+        AprsBeaconStore.shared.receiveBeacon(beacon: testBeacon1)
         waitForExpectations(timeout: 1.0)
 
-        testExpectation = expectation(description: "Add second beacon.")
-        let secondBeacon = AprsPlotterDelegateMock()
-        secondBeacon.didReceiveBeaconUpdateClosure = { station in
-            testExpectation.fulfill()
-        }
-        beaconStore.receiveBeacon(beacon: testBeacon3)
+        let _ = expectation(forNotification: .didReceiveBeacon, object: nil, handler: { (notification) -> Bool in
+            if let userInfo = notification.userInfo as? [String: String] {
+                guard let station = userInfo["station"] else {
+                    return false
+                }
+                XCTAssertEqual(station, "W5CAA-9")
+
+                guard let beacons = AprsBeaconStore.shared.getBeacons(forStation: station) else {
+                    return false
+                }
+
+                XCTAssertEqual(beacons.count, 1)
+                XCTAssertEqual(beacons[0].station, "W5CAA-9")
+                XCTAssertEqual(beacons[0].destination, "TEST")
+                XCTAssertEqual(beacons[0].message, "This is a third test.")
+
+                return true
+            }
+
+            return false
+        })
+        AprsBeaconStore.shared.receiveBeacon(beacon: testBeacon3)
         waitForExpectations(timeout: 1.0)
 
-        XCTAssertEqual(beaconStore.stationCount, 2)
+        XCTAssertEqual(AprsBeaconStore.shared.stationCount, 2)
     }
+
 }
